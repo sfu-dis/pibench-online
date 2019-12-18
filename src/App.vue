@@ -26,13 +26,13 @@
     </el-form>
     <el-form ref="form-config" :model="piBenchParams" label-width="10em">
       <el-form-item label="Thread Count">
-        <el-input-number v-model="piBenchParams.threadCount" :step="1" :min="1" :max="10"></el-input-number>
+        <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
       </el-form-item>
       <el-form-item label="Operation Count">
-        <el-input-number v-model="piBenchParams.opCount" :step="1" :min="1" :max="10"></el-input-number>
+        <el-input-number v-model="piBenchParams.op_cnt" :step="1" :min="1" :max="10"></el-input-number>
       </el-form-item>
       <el-form-item label="Load Count">
-        <el-input-number v-model="piBenchParams.loadCount" :step="1" :min="1" :max="10"></el-input-number>
+        <el-input-number v-model="piBenchParams.load_cnt" :step="1" :min="1" :max="10"></el-input-number>
       </el-form-item>
       <el-form-item label="Read Ratio">
         <el-input-number v-model="piBenchParams.read" :step="0.1" :min="0" :max="1"></el-input-number>
@@ -47,10 +47,10 @@
         <el-input-number v-model="piBenchParams.delete" :step="0.1" :min="0" :max="1"></el-input-number>
       </el-form-item>
       <el-form-item label="Env">
-        <el-input type="textarea" v-model="piBenchParams.env"></el-input>
+        <el-input type="textarea" v-model="env"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">Start</el-button>
+        <el-button type="primary" @click="startBenchmark">Start</el-button>
       </el-form-item>
     </el-form>
 
@@ -60,6 +60,7 @@
 
 <script>
 import echarts from "echarts";
+import { fetchInstanceInfo, postBenchmark } from "@/api.js";
 
 export default {
   name: "app",
@@ -73,7 +74,16 @@ export default {
       ],
       backends: [{ value: "webassembly" }, { value: "localhost" }],
       formBasic: {},
-      piBenchParams: {}
+      piBenchParams: {
+        thread_cnt: 1,
+        op_cnt: 1000,
+        load_cnt: 1000,
+        read: 0.5,
+        insert: 0.5,
+        delete: 0,
+        update: 0
+      },
+      env: "PMEM_IS_PMEM_FORCE=1,"
     };
   },
   mounted() {
@@ -97,6 +107,21 @@ export default {
         }
       ]
     });
+  },
+  methods: {
+    async startBenchmark() {
+      const data = {
+        basic: this.formBasic,
+        params: this.piBenchParams,
+        env: this.env
+      };
+      const response = await postBenchmark(data);
+      console.log(response);
+    },
+    async getInstance() {
+      const data = await fetchInstanceInfo();
+      console.log(data);
+    }
   }
 };
 </script>
