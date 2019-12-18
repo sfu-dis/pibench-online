@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <HelloWorld msg="Welcome to Your Vue.js App" />
+    <el-button type="primary">Primary</el-button>
   </div>
 </template>
 
