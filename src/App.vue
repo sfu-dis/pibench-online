@@ -46,6 +46,9 @@
       <el-form-item label="Delete Ratio">
         <el-input-number v-model="piBenchParams.delete" :step="0.1" :min="0" :max="1"></el-input-number>
       </el-form-item>
+      <el-form-item label="Sample Time (ms)">
+        <el-input-number v-model="piBenchParams.sample_time" :step="100" :min="100" :max="2000"></el-input-number>
+      </el-form-item>
       <el-form-item label="Env">
         <el-input type="textarea" v-model="env"></el-input>
       </el-form-item>
@@ -54,7 +57,7 @@
       </el-form-item>
     </el-form>
 
-    <div id="chart" style="height: 500px; width:500px"></div>
+    <div id="chart" v-if="showResult" v-loading="resultLoading" style="height: 500px; width:500px"></div>
   </div>
 </template>
 
@@ -77,33 +80,15 @@ export default {
         read: 0.5,
         insert: 0.5,
         delete: 0,
-        update: 0
+        update: 0,
+        sample_time: 500
       },
-      env: "PMEM_IS_PMEM_FORCE=1,"
+      env: "PMEM_IS_PMEM_FORCE=1,",
+      showResult: false,
+      resultLoading: true
     };
   },
-  mounted() {
-    // initialize echarts instance with prepared DOM
-    let myChart = echarts.init(document.getElementById("chart"));
-    // draw chart
-    myChart.setOption({
-      title: {
-        text: "ECharts entry example"
-      },
-      tooltip: {},
-      xAxis: {
-        data: ["shirt", "cardign", "chiffon shirt", "pants", "heels", "socks"]
-      },
-      yAxis: {},
-      series: [
-        {
-          name: "sales",
-          type: "bar",
-          data: [5, 20, 36, 10, 10, 20]
-        }
-      ]
-    });
-  },
+  mounted() {},
   methods: {
     async startBenchmark() {
       const data = {
@@ -120,6 +105,8 @@ export default {
       await this.checkServerStatus();
     },
     async checkServerStatus() {
+      this.showResult = true;
+      this.resultLoading = true;
       const wait = time => new Promise(tick => setTimeout(tick, time));
       let serverStatus = { status: "running" };
       do {
@@ -129,6 +116,7 @@ export default {
 
       if (serverStatus["status"] === "finished") {
         this.$message("Server finished the benchmark!");
+        this.plotFigure(serverStatus["data"]);
         console.log(serverStatus["data"]);
       }
     },
@@ -139,6 +127,33 @@ export default {
           value: item
         };
       });
+    },
+    plotFigure(data) {
+      // initialize echarts instance with prepared DOM
+      let myChart = echarts.init(document.getElementById("chart"));
+      // draw chart
+      myChart.setOption({
+        title: {
+          text: "PiBench Result"
+        },
+        tooltip: {},
+        xAxis: {
+          type: "category",
+          data: data["samplings"].map((_, index) => {
+            return data["sample_time"] * index;
+          })
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            type: "line",
+            data: data["samplings"]
+          }
+        ]
+      });
+      this.resultLoading = false;
     }
   }
 };
