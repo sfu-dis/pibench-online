@@ -4,7 +4,7 @@
 
     <el-form ref="form-basic" :inline="true" :model="formBasic" label-width="10em">
       <el-form-item label="PiBench Backend">
-        <el-select v-model="formBasic.backend" placeholder="Select Backend">
+        <el-select @change="changeBackend" v-model="formBasic.backend" placeholder="Select Backend">
           <el-option
             v-for="item in backends"
             :key="item.value"
@@ -60,18 +60,14 @@
 
 <script>
 import echarts from "echarts";
-import { fetchInstanceInfo, postBenchmark } from "@/api.js";
+import { fetchInstanceInfo, postBenchmark, fetchServerStatus } from "@/api.js";
 
 export default {
   name: "app",
   components: {},
   data() {
     return {
-      wrappers: [
-        { value: "std::set" },
-        { value: "bztree" },
-        { value: "fptree" }
-      ],
+      wrappers: [],
       backends: [{ value: "webassembly" }, { value: "localhost" }],
       formBasic: {},
       piBenchParams: {
@@ -116,11 +112,33 @@ export default {
         env: this.env
       };
       const response = await postBenchmark(data);
-      console.log(response);
+      if (response["result"] !== "Ok") {
+        this.$message("Server Error!");
+        return;
+      }
+      this.$message("Benchmark started!");
+      await this.checkServerStatus();
     },
-    async getInstance() {
+    async checkServerStatus() {
+      const wait = time => new Promise(tick => setTimeout(tick, time));
+      let serverStatus = { status: "running" };
+      do {
+        await wait(1000);
+        serverStatus = await fetchServerStatus();
+      } while (serverStatus["status"] === "running");
+
+      if (serverStatus["status"] === "finished") {
+        this.$message("Server finished the benchmark!");
+        console.log(serverStatus["data"]);
+      }
+    },
+    async changeBackend() {
       const data = await fetchInstanceInfo();
-      console.log(data);
+      this.wrappers = data.wrappers.map(item => {
+        return {
+          value: item
+        };
+      });
     }
   }
 };
