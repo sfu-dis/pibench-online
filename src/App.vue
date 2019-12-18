@@ -1,26 +1,59 @@
 <template>
   <div id="app">
     <h1>PiBench Online</h1>
-    <div class="basic-config">
-      <el-select v-model="backendSelected" placeholder="Select Backend">
-        <el-option
-          v-for="item in backends"
-          :key="item.value"
-          :label="item.value"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-select v-model="wrapperSelected" placeholder="Select Wrapper">
-        <el-option
-          v-for="item in wrappers"
-          :key="item.value"
-          :label="item.value"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-    </div>
 
-    <el-button type="primary">Primary</el-button>
+    <el-form ref="form-basic" :inline="true" :model="formBasic" label-width="10em">
+      <el-form-item label="PiBench Backend">
+        <el-select v-model="formBasic.backend" placeholder="Select Backend">
+          <el-option
+            v-for="item in backends"
+            :key="item.value"
+            :label="item.value"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Wrapper">
+        <el-select v-model="formBasic.wrapper" placeholder="Select Wrapper">
+          <el-option
+            v-for="item in wrappers"
+            :key="item.value"
+            :label="item.value"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <el-form ref="form-config" :model="piBenchParams" label-width="10em">
+      <el-form-item label="Thread Count">
+        <el-input-number v-model="piBenchParams.threadCount" :step="1" :min="1" :max="10"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Operation Count">
+        <el-input-number v-model="piBenchParams.opCount" :step="1" :min="1" :max="10"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Load Count">
+        <el-input-number v-model="piBenchParams.loadCount" :step="1" :min="1" :max="10"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Read Ratio">
+        <el-input-number v-model="piBenchParams.read" :step="0.1" :min="0" :max="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Insert Ratio">
+        <el-input-number v-model="piBenchParams.insert" :step="0.1" :min="0" :max="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Update Ratio">
+        <el-input-number v-model="piBenchParams.update" :step="0.1" :min="0" :max="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Delete Ratio">
+        <el-input-number v-model="piBenchParams.delete" :step="0.1" :min="0" :max="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Env">
+        <el-input type="textarea" v-model="piBenchParams.env"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary">Start</el-button>
+      </el-form-item>
+    </el-form>
+
     <div id="chart" style="height: 500px; width:500px"></div>
   </div>
 </template>
@@ -38,9 +71,9 @@ export default {
         { value: "bztree" },
         { value: "fptree" }
       ],
-      wrapperSelected: "",
       backends: [{ value: "webassembly" }, { value: "localhost" }],
-      backendSelected: ""
+      formBasic: {},
+      piBenchParams: {}
     };
   },
   mounted() {
