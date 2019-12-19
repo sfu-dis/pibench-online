@@ -25,10 +25,10 @@
       </el-form-item>
     </el-form>
     <el-form ref="form-config" :model="piBenchParams" label-width="10em">
-      <el-form-item label="Thread Count">
+      <el-form-item label="Threads">
         <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
       </el-form-item>
-      <el-form-item label="Operation Count">
+      <el-form-item label="Operations">
         <el-input-number v-model="piBenchParams.op_cnt" :step="1" :min="1" :max="10"></el-input-number>
       </el-form-item>
       <el-form-item label="Load Count">
@@ -46,8 +46,41 @@
       <el-form-item label="Delete Ratio">
         <el-input-number v-model="piBenchParams.delete" :step="0.1" :min="0" :max="1"></el-input-number>
       </el-form-item>
+
+      <el-form-item label="Latency Sampling">
+        <el-input-number v-model="piBenchParams.latency_sampling" :step="0.1" :min="0" :max="1"></el-input-number>
+      </el-form-item>
       <el-form-item label="Sample Time (ms)">
         <el-input-number v-model="piBenchParams.sample_time" :step="100" :min="100" :max="2000"></el-input-number>
+      </el-form-item>
+
+      <el-form-item label="Key Prefix">
+        <el-input v-model="piBenchParams.key_prefix"></el-input>
+      </el-form-item>
+
+      <el-form-item label="Key Size">
+        <el-input-number v-model="piBenchParams.key_size" :min="4" :step="1"></el-input-number>
+      </el-form-item>
+
+      <el-form-item label="Value Size">
+        <el-input-number v-model="piBenchParams.value_size" :min="4" :step="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Scan Size">
+        <el-input-number v-model="piBenchParams.scan_size" :min="1" :step="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Distribution">
+        <el-select v-model="piBenchParams.distribution" placeholder="Distribution">
+          <el-option v-for="item in possibleDistributions" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Seed">
+        <el-input-number v-model="piBenchParams.seed" :step="1"></el-input-number>
+      </el-form-item>
+      <el-form-item label="Use PCM">
+        <el-switch v-model="piBenchParams.use_pcm"></el-switch>
+      </el-form-item>
+      <el-form-item label="Skip Load">
+        <el-switch v-model="piBenchParams.skip_load"></el-switch>
       </el-form-item>
       <el-form-item label="Env">
         <el-input type="textarea" v-model="env"></el-input>
@@ -73,6 +106,7 @@ export default {
       wrappers: [],
       backends: [{ value: "webassembly" }, { value: "localhost" }],
       formBasic: {},
+      possibleDistributions: ["UNIFROM", "ZIPFAN"],
       piBenchParams: {
         thread_cnt: 1,
         op_cnt: 1000,
@@ -81,7 +115,16 @@ export default {
         insert: 0.5,
         delete: 0,
         update: 0,
-        sample_time: 500
+        sample_time: 500,
+        scan_size: 100,
+        key_size: 8,
+        value_size: 8,
+        key_prefix: "",
+        use_pcm: false,
+        seed: 42,
+        skip_load: true,
+        distribution: "UNIFROM",
+        latency_sampling: 0.1
       },
       env: "PMEM_IS_PMEM_FORCE=1,",
       showResult: false,
