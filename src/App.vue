@@ -105,17 +105,20 @@
       </el-form-item>
     </el-form>
 
-    <div id="chart" v-if="showResult" v-loading="resultLoading" style="height: 500px; width:500px"></div>
+    <results ref="results" v-if="showResult"></results>
   </div>
 </template>
 
 <script>
-import echarts from "echarts";
 import { fetchInstanceInfo, postBenchmark, fetchServerStatus } from "@/api.js";
+
+import Results from "@/components/Results.vue";
 
 export default {
   name: "app",
-  components: {},
+  components: {
+    results: Results
+  },
   data() {
     return {
       wrappers: [],
@@ -187,40 +190,13 @@ export default {
 
       if (serverStatus["status"] === "finished") {
         this.$message("Server finished the benchmark!");
-        this.plotFigure(serverStatus["data"]);
+        this.$refs.results.plotFigure(serverStatus["data"]);
         console.log(serverStatus["data"]);
       }
     },
     changeBackend(val) {
       this.formBasic.backend = val.url;
       this.wrappers = val.wrappers;
-    },
-    plotFigure(data) {
-      // initialize echarts instance with prepared DOM
-      let myChart = echarts.init(document.getElementById("chart"));
-      // draw chart
-      myChart.setOption({
-        title: {
-          text: "PiBench Result"
-        },
-        tooltip: {},
-        xAxis: {
-          type: "category",
-          data: data["samplings"].map((_, index) => {
-            return data["sample_time"] * index;
-          })
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            type: "line",
-            data: data["samplings"]
-          }
-        ]
-      });
-      this.resultLoading = false;
     }
   }
 };
