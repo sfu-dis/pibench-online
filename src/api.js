@@ -1,7 +1,7 @@
 const API_ENDPOINT = "http://localhost:8000"
 
-export async function fetchInstanceInfo() {
-    const response = await fetch(`${API_ENDPOINT}/info`);
+export async function fetchInstanceInfo(backendUrl) {
+    const response = await fetch(`${backendUrl}/info`);
     const data = response.json();
     return data;
 }

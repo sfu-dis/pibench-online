@@ -3,27 +3,33 @@
     <h1>PiBench Online</h1>
 
     <el-form ref="form-basic" :inline="true" :model="formBasic" label-width="10em">
+      <el-form-item>
+        <el-button @click="dialogVisible=true">Add Backend</el-button>
+      </el-form-item>
       <el-form-item label="PiBench Backend">
-        <el-select @change="changeBackend" v-model="formBasic.backend" placeholder="Select Backend">
-          <el-option
-            v-for="item in backends"
-            :key="item.value"
-            :label="item.value"
-            :value="item.value"
-          ></el-option>
+        <el-select @change="changeBackend" :value="formBasic.backend" placeholder="Select Backend">
+          <el-option v-for="item in backends" :key="item.url" :label="item.url" :value="item"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="Wrapper">
         <el-select v-model="formBasic.wrapper" placeholder="Select Wrapper">
-          <el-option
-            v-for="item in wrappers"
-            :key="item.value"
-            :label="item.value"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in wrappers" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
+
+    <el-dialog title="Add Backend" :visible.sync="dialogVisible" width="40%">
+      <el-form :inline="true">
+        <el-form-item label="PiBench Backend URL:">
+          <el-input v-model="backendUrlInput"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addBackend">Confirm</el-button>
+      </span>
+    </el-dialog>
+
     <el-form ref="form-config" :model="piBenchParams" label-width="10em">
       <el-form-item label="Threads">
         <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
@@ -68,6 +74,15 @@
       <el-form-item label="Scan Size">
         <el-input-number v-model="piBenchParams.scan_size" :min="1" :step="1"></el-input-number>
       </el-form-item>
+
+      <el-form-item label="Pool Size">
+        <el-input-number v-model="piBenchParams.pool_size" :min="1" :step="1"></el-input-number>
+      </el-form-item>
+
+      <el-form-item label="Pool Path">
+        <el-input v-model="piBenchParams.pool_path"></el-input>
+      </el-form-item>
+
       <el-form-item label="Distribution">
         <el-select v-model="piBenchParams.distribution" placeholder="Distribution">
           <el-option v-for="item in possibleDistributions" :key="item" :label="item" :value="item"></el-option>
@@ -104,9 +119,11 @@ export default {
   data() {
     return {
       wrappers: [],
-      backends: [{ value: "webassembly" }, { value: "localhost" }],
+      backends: [],
       formBasic: {},
       possibleDistributions: ["UNIFROM", "ZIPFAN"],
+      dialogVisible: false,
+      backendUrlInput: "http://localhost:8000",
       piBenchParams: {
         thread_cnt: 1,
         op_cnt: 1000,
@@ -123,6 +140,8 @@ export default {
         use_pcm: false,
         seed: 42,
         skip_load: true,
+        pool_size: 1024 * 1024,
+        pool_path: "pool.data",
         distribution: "UNIFROM",
         latency_sampling: 0.1
       },
@@ -133,6 +152,15 @@ export default {
   },
   mounted() {},
   methods: {
+    async addBackend() {
+      try {
+        const data = await fetchInstanceInfo(this.backendUrlInput);
+        this.backends.push(data);
+        this.dialogVisible = false;
+      } catch {
+        this.$message("Invalid backend!");
+      }
+    },
     async startBenchmark() {
       const data = {
         basic: this.formBasic,
@@ -163,13 +191,9 @@ export default {
         console.log(serverStatus["data"]);
       }
     },
-    async changeBackend() {
-      const data = await fetchInstanceInfo();
-      this.wrappers = data.wrappers.map(item => {
-        return {
-          value: item
-        };
-      });
+    changeBackend(val) {
+      this.formBasic.backend = val.url;
+      this.wrappers = val.wrappers;
     },
     plotFigure(data) {
       // initialize echarts instance with prepared DOM
