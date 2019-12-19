@@ -1,6 +1,22 @@
 <template>
-  <div>
-    <div id="chart" v-loading="resultLoading" style="height: 500px; width:500px"></div>
+  <div v-loading="resultLoading">
+    <div id="chart" style="height: 500px; width:500px"></div>
+    <el-card>
+      <div v-if="benchmarkResults['benchmark_env']">
+        <div>Benchmark Environments:</div>
+        <div v-for="item in Object.entries(benchmarkResults['benchmark_env'])" :key="item[0]">
+          <span class="result-category">{{item[0]}}</span>
+          -{{item[1]}}
+        </div>
+      </div>
+      <div style="margin-top:1em;" v-if="benchmarkResults['pcm_results']">
+        <div>PCM Results:</div>
+        <div v-for="item in Object.entries(benchmarkResults['pcm_results'])" :key="item[0]">
+          <span class="result-category">{{item[0]}}</span>
+          -{{item[1]}}
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -10,9 +26,13 @@ export default {
   name: "Results",
   props: {},
   data() {
-    return { resultLoading: true };
+    return { resultLoading: true, benchmarkResults: {} };
   },
   methods: {
+    updateResults(results) {
+      this.benchmarkResults = results;
+      this.plotFigure(results);
+    },
     plotFigure(data) {
       let myChart = echarts.init(document.getElementById("chart"));
       myChart.setOption({
@@ -43,5 +63,8 @@ export default {
 </script>
 
 <style scoped>
+.result-category {
+  font-weight: 700;
+}
 </style>
 

@@ -190,8 +190,7 @@ export default {
 
       if (serverStatus["status"] === "finished") {
         this.$message("Server finished the benchmark!");
-        this.$refs.results.plotFigure(serverStatus["data"]);
-        console.log(serverStatus["data"]);
+        this.$refs.results.updateResults(serverStatus["data"]);
       }
     },
     changeBackend(val) {
