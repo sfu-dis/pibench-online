@@ -3,7 +3,14 @@
     <!-- <el-button @click="dialogVisible=true">Add Backend</el-button> -->
     <section style="display:flex;">
       <el-card class="config-zone">
-        <el-form ref="form-basic" :inline="true" size="mini" :model="formBasic" label-width="10em">
+        <el-form
+          @submit.native.prevent
+          ref="form-basic"
+          :inline="true"
+          size="mini"
+          :model="formBasic"
+          label-width="10em"
+        >
           <el-form-item label="Backend">
             <el-select
               @change="changeBackend"
@@ -38,6 +45,7 @@
           size="mini"
           :model="piBenchParams"
           label-width="10em"
+          @submit.native.prevent
         >
           <el-form-item label="Threads">
             <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
