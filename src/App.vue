@@ -6,6 +6,7 @@
       <el-menu-item index="1">Settings</el-menu-item>
     </el-menu>
 
+    <router-view></router-view>
     <!-- <el-button @click="dialogVisible=true">Add Backend</el-button> -->
     <section style="display:flex;">
       <el-card class="config-zone">
