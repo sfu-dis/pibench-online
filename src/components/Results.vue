@@ -9,9 +9,9 @@
           -{{item[1]}}
         </div>
       </div>
-      <div v-if="benchmarkResults['benchmark_env']">
+      <div v-if="benchmarkResults['basics']">
         <div>Basic Results:</div>
-        <div v-for="item in Object.entries(benchmarkResults['benchmark_env'])" :key="item[0]">
+        <div v-for="item in Object.entries(benchmarkResults['basics'])" :key="item[0]">
           <span class="result-category">{{item[0]}}</span>
           -{{item[1]}}
         </div>
@@ -38,7 +38,7 @@ export default {
   methods: {
     updateResults(results) {
       this.benchmarkResults = results;
-      this.plotFigure(results);
+      this.plotFigure(results["basics"]);
     },
     plotFigure(data) {
       let myChart = echarts.init(document.getElementById("chart"));

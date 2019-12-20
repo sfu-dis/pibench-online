@@ -18,6 +18,7 @@ const samplingRegex = new RegExp('Samples:\\n([\\s\\d+\\n?]*)');
 
 export function resultParser(rawData) {
     let result = {
+        'basics': {},
         'benchmark_env': {}
     }
     let all_entries = Object.entries(envRegex);
@@ -29,10 +30,10 @@ export function resultParser(rawData) {
     all_entries = Object.entries(benchmarkRegex);
     for (let i = 0; i < all_entries.length; i++) {
         const current_entry = all_entries[i];
-        result[current_entry[0]] = current_entry[1].exec(rawData)[1];
+        result['basics'][current_entry[0]] = current_entry[1].exec(rawData)[1];
     }
 
     let samplingResult = samplingRegex.exec(rawData)[1];
-    result['samplings'] = samplingResult.split('\n').map(item => item.trim()).filter(item => item);
+    result['basics']['samplings'] = samplingResult.split('\n').map(item => item.trim()).filter(item => item);
     return result;
 }
