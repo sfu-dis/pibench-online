@@ -116,6 +116,8 @@ import { resultParser } from "@/resultParser.js";
 
 import Results from "@/components/Results.vue";
 
+import { mapState, mapMutations } from "vuex";
+
 export default {
   name: "app",
   components: {
@@ -124,7 +126,6 @@ export default {
   data() {
     return {
       wrappers: [],
-      backends: [],
       formBasic: {},
       possibleDistributions: ["UNIFROM", "ZIPFAN"],
       dialogVisible: false,
@@ -156,8 +157,9 @@ export default {
       serverResponse: {}
     };
   },
-  mounted() {},
+  computed: mapState(["backends"]),
   methods: {
+    ...mapMutations({ addBackendStore: "addBackend" }),
     testParser() {
       const text =
         "Environment:\n\tTime: Fri Dec 20 06:39:39 2019\n\tCPU: 8 * Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz\n\tCPU Cache: 8192 KB\n\tKernel: Linux 4.19.84-microsoft-standard\nBenchmark Options:\n\tTarget: /home/hao/pibench/release/libstlmap_wrapper.so\n\t# Records: 1000000\n\t# Operations: 1000000\n\t# Threads: 1\n\tSampling: 1000 ms\n\tLatency: 0\n\tKey prefix: \n\tKey size: 4\n\tValue size: 4\n\tRandom seed: 1729\n\tKey distribution: UNIFORM\n\tScan size: 100\n\tOperations ratio:\n\t\tRead: 0\n\t\tInsert: 1\n\t\tUpdate: 0\n\t\tDelete: 0\n\t\tScan: 0\nOverview:\n\tLoad time: 905.411 milliseconds\n\tRun time: 1409.6847 milliseconds\n\tThroughput: 709378.5000 ops/s\nSamples:\n\t739068\n\t260932\n";
@@ -166,7 +168,7 @@ export default {
     async addBackend() {
       try {
         const data = await fetchInstanceInfo(this.backendUrlInput);
-        this.backends.push(data);
+        this.addBackendStore(data);
         this.dialogVisible = false;
       } catch {
         this.$message("Invalid backend!");
