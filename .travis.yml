@@ -1,0 +1,31 @@
+
+language: node_js
+node_js:
+- lts/*
+
+before_install:
+  - npm install -g yarn --cache-min 999999999
+
+install:
+  yarn install
+
+
+script:
+  - yarn build
+
+
+cache:
+  directories:
+  - node_modules
+
+before_deploy:
+- echo pibench.haoxp.xyz > dist/CNAME
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: dist
+  target-branch: gh-pages
+  on:
+    branch: master 
