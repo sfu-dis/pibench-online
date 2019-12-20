@@ -26,19 +26,6 @@
             </el-select>
           </el-form-item>
         </el-form>
-
-        <el-dialog title="Add Backend" :visible.sync="dialogVisible" width="40%">
-          <el-form :inline="true">
-            <el-form-item label="PiBench Backend URL:">
-              <el-input v-model="backendUrlInput"></el-input>
-            </el-form-item>
-          </el-form>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="addBackend">Confirm</el-button>
-          </span>
-        </el-dialog>
-
         <el-form
           ref="form-config"
           :inline="true"
@@ -138,7 +125,7 @@
 </template>
 
 <script>
-import { fetchInstanceInfo, postBenchmark, fetchServerStatus } from "@/api.js";
+import { postBenchmark, fetchServerStatus } from "@/api.js";
 import { resultParser } from "@/resultParser.js";
 
 import Results from "@/components/Results.vue";
@@ -156,8 +143,6 @@ export default {
       wrappers: [],
       formBasic: {},
       possibleDistributions: ["UNIFROM", "ZIPFAN"],
-      dialogVisible: false,
-      backendUrlInput: "http://localhost:8000",
       piBenchParams: {
         thread_cnt: 1,
         op_cnt: 1000,
@@ -188,7 +173,6 @@ export default {
   computed: mapState(["backends", "configPresets"]),
   methods: {
     ...mapMutations({
-      addBackendStore: "addBackend",
       addConfigPreset: "addConfigPreset"
     }),
     savePreset() {
@@ -201,15 +185,6 @@ export default {
         name: `preset${this.configPresets.length}`,
         data: data
       });
-    },
-    async addBackend() {
-      try {
-        const data = await fetchInstanceInfo(this.backendUrlInput);
-        this.addBackendStore(data);
-        this.dialogVisible = false;
-      } catch {
-        this.$message("Invalid backend!");
-      }
     },
     async startBenchmark() {
       const data = {
