@@ -9,6 +9,13 @@
           -{{item[1]}}
         </div>
       </div>
+      <div v-if="benchmarkResults['benchmark_env']">
+        <div>Basic Results:</div>
+        <div v-for="item in Object.entries(benchmarkResults['benchmark_env'])" :key="item[0]">
+          <span class="result-category">{{item[0]}}</span>
+          -{{item[1]}}
+        </div>
+      </div>
       <div style="margin-top:1em;" v-if="benchmarkResults['pcm_results']">
         <div>PCM Results:</div>
         <div v-for="item in Object.entries(benchmarkResults['pcm_results'])" :key="item[0]">

@@ -17,8 +17,8 @@ export async function postBenchmark(data) {
     return response.json();
 }
 
-export async function fetchServerStatus() {
-    const response = await fetch(`${API_ENDPOINT}/status`);
+export async function fetchServerStatus(pid) {
+    const response = await fetch(`${API_ENDPOINT}/status?pid=${pid}`);
     const data = response.json();
     return data;
 }

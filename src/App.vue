@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>PiBench Online</h1>
+    <el-button @click="testParser">test</el-button>
 
     <el-form ref="form-basic" :inline="true" :model="formBasic" label-width="10em">
       <el-form-item>
@@ -111,6 +112,7 @@
 
 <script>
 import { fetchInstanceInfo, postBenchmark, fetchServerStatus } from "@/api.js";
+import { resultParser } from "@/resultParser.js";
 
 import Results from "@/components/Results.vue";
 
@@ -150,11 +152,17 @@ export default {
       },
       env: "PMEM_IS_PMEM_FORCE=1,",
       showResult: false,
-      resultLoading: true
+      resultLoading: true,
+      serverResponse: {}
     };
   },
   mounted() {},
   methods: {
+    testParser() {
+      const text =
+        "Environment:\n\tTime: Fri Dec 20 06:39:39 2019\n\tCPU: 8 * Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz\n\tCPU Cache: 8192 KB\n\tKernel: Linux 4.19.84-microsoft-standard\nBenchmark Options:\n\tTarget: /home/hao/pibench/release/libstlmap_wrapper.so\n\t# Records: 1000000\n\t# Operations: 1000000\n\t# Threads: 1\n\tSampling: 1000 ms\n\tLatency: 0\n\tKey prefix: \n\tKey size: 4\n\tValue size: 4\n\tRandom seed: 1729\n\tKey distribution: UNIFORM\n\tScan size: 100\n\tOperations ratio:\n\t\tRead: 0\n\t\tInsert: 1\n\t\tUpdate: 0\n\t\tDelete: 0\n\t\tScan: 0\nOverview:\n\tLoad time: 905.411 milliseconds\n\tRun time: 1409.6847 milliseconds\n\tThroughput: 709378.5000 ops/s\nSamples:\n\t739068\n\t260932\n";
+      console.log(resultParser(text));
+    },
     async addBackend() {
       try {
         const data = await fetchInstanceInfo(this.backendUrlInput);
@@ -173,24 +181,31 @@ export default {
       const response = await postBenchmark(data);
       if (response["result"] !== "Ok") {
         this.$message("Server Error!");
+        console.log(response);
         return;
       }
       this.$message("Benchmark started!");
+      this.serverResponse = response;
       await this.checkServerStatus();
     },
     async checkServerStatus() {
+      if (!this.serverResponse["pid"]) {
+        return;
+      }
       this.showResult = true;
       this.resultLoading = true;
       const wait = time => new Promise(tick => setTimeout(tick, time));
       let serverStatus = { status: "running" };
       do {
         await wait(1000);
-        serverStatus = await fetchServerStatus();
+        serverStatus = await fetchServerStatus(this.serverResponse["pid"]);
       } while (serverStatus["status"] === "running");
 
       if (serverStatus["status"] === "finished") {
         this.$message("Server finished the benchmark!");
-        this.$refs.results.updateResults(serverStatus["data"]);
+
+        const cleanResults = resultParser(serverStatus["data"]);
+        this.$refs.results.updateResults(cleanResults);
       }
     },
     changeBackend(val) {
