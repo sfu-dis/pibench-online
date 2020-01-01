@@ -24,7 +24,9 @@
           <el-form-item label="Avaliable Wrappers:">
             <el-tag v-for="wrapper in item['wrappers']" :key="wrapper">{{wrapper}}</el-tag>
           </el-form-item>
+
           <el-form-item>
+            <el-button plain type="primary" @click="deleteBackend(index)">Upload Wrapper</el-button>
             <el-button plain type="danger" @click="deleteBackend(index)">Delete</el-button>
           </el-form-item>
         </el-form>
