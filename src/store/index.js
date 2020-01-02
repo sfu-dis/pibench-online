@@ -11,8 +11,12 @@ const state = {
 
 const mutations = {
   addBackend(state, backend) {
-    state.backends.push(backend)
+    state.backends.push(backend);
   },
+  updateBackend(state, { index, backend }) {
+    Vue.set(state.backends, index, backend);
+  },
+
   deleteBackend(state, index) {
     state.backends = state.backends.splice(index, 1);
   },

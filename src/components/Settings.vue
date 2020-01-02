@@ -26,7 +26,15 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button plain type="primary" @click="deleteBackend(index)">Upload Wrapper</el-button>
+            <el-upload
+              name="wrapper"
+              action="http://dbserver.haoxp.xyz:8000/upload_wrapper/"
+              :show-file-list="false"
+              :on-success="updateBackend(index)"
+              :on-error="uploadFailed"
+            >
+              <el-button size="small" type="primary">Click to upload</el-button>
+            </el-upload>
             <el-button plain type="danger" @click="deleteBackend(index)">Delete</el-button>
           </el-form-item>
         </el-form>
@@ -63,13 +71,14 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      backendUrlInput: "http://localhost:8000"
+      backendUrlInput: "http://dbserver.haoxp.xyz:8000"
     };
   },
   methods: {
     ...mapMutations({
       addBackendStore: "addBackend",
-      deleteBackendStore: "deleteBackend"
+      deleteBackendStore: "deleteBackend",
+      updateBackendStore: "updateBackend"
     }),
     cleanStorage() {
       localStorage.setItem("vuex", "");
@@ -83,6 +92,22 @@ export default {
       } catch {
         this.$message("Invalid backend!");
       }
+    },
+    updateBackend(index) {
+      return () => {
+        try {
+          let self = this;
+          const targetBackend = this.backends[index];
+          fetchInstanceInfo(targetBackend.url).then(data => {
+            self.updateBackendStore({ index, backend: data });
+          });
+        } catch {
+          this.$message("Invalid backend!");
+        }
+      };
+    },
+    async uploadFailed() {
+      this.$message("Upload failed!");
     },
     deleteBackend(index) {
       this.deleteBackendStore(index);
