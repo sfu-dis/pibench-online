@@ -22,10 +22,14 @@
             <el-input :value="item['socket_cnt']" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="Avaliable Wrappers:">
-            <el-tag v-for="wrapper in item['wrappers']" :key="wrapper">{{wrapper}}</el-tag>
-          </el-form-item>
+            <el-tag
+              closable
+              size="small"
+              v-for="wrapper in item['wrappers']"
+              :key="wrapper"
+              @close="removeWrapper(index, wrapper)"
+            >{{wrapper}}</el-tag>
 
-          <el-form-item>
             <el-upload
               name="wrapper"
               action="http://dbserver.haoxp.xyz:8000/upload_wrapper/"
@@ -33,8 +37,11 @@
               :on-success="updateBackend(index)"
               :on-error="uploadFailed"
             >
-              <el-button size="small" type="primary">Click to upload</el-button>
+              <el-button plain>Upload Wrapper</el-button>
             </el-upload>
+          </el-form-item>
+
+          <el-form-item>
             <el-button plain type="danger" @click="deleteBackend(index)">Delete</el-button>
           </el-form-item>
         </el-form>
@@ -61,7 +68,7 @@
 </template>
 
 <script>
-import { fetchInstanceInfo } from "@/api.js";
+import { fetchInstanceInfo, removeWrapperApi } from "@/api.js";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -105,6 +112,14 @@ export default {
           this.$message("Invalid backend!");
         }
       };
+    },
+    async removeWrapper(index, wrapper) {
+      const data = await removeWrapperApi(this.backends[index].url, wrapper);
+      if (data["result"] === "ok") {
+        this.updateBackend(index)();
+      } else {
+        this.$message("Delete failed!");
+      }
     },
     async uploadFailed() {
       this.$message("Upload failed!");

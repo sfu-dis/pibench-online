@@ -23,3 +23,15 @@ export async function fetchServerStatus(pid) {
     return data;
 }
 
+export async function removeWrapperApi(backendUrl, wrapperName) {
+    const response = await fetch(`${backendUrl}/remove_wrapper`, {
+        method: "post",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "wrapper_name": wrapperName })
+    });
+    const data = response.json();
+    return data;
+}
+
