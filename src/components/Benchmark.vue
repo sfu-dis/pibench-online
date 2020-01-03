@@ -38,7 +38,7 @@
             <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
           </el-form-item>
           <el-form-item label="Operations">
-            <el-input-number v-model="piBenchParams.op_cnt" :step="1" :min="1" :max="10"></el-input-number>
+            <el-input-number v-model="piBenchParams.op_cnt" :step="1000" :min="1"></el-input-number>
           </el-form-item>
           <el-form-item label="Load Count">
             <el-input-number v-model="piBenchParams.load_cnt" :step="1" :min="1" :max="10"></el-input-number>
@@ -142,16 +142,16 @@ export default {
     return {
       wrappers: [],
       formBasic: {},
-      possibleDistributions: ["UNIFROM", "ZIPFAN"],
+      possibleDistributions: ["UNIFORM", "ZIPFAN"],
       piBenchParams: {
         thread_cnt: 1,
-        op_cnt: 1000,
+        op_cnt: 3000000,
         load_cnt: 1000,
-        read: 0.5,
-        insert: 0.5,
+        read: 0,
+        insert: 1,
         delete: 0,
         update: 0,
-        sample_time: 500,
+        sample_time: 100,
         scan_size: 100,
         key_size: 8,
         value_size: 8,
@@ -161,7 +161,7 @@ export default {
         skip_load: true,
         pool_size: 1024 * 1024,
         pool_path: "pool.data",
-        distribution: "UNIFROM",
+        distribution: "UNIFORM",
         latency_sampling: 0.1
       },
       env: "PMEM_IS_PMEM_FORCE=1,",
@@ -192,7 +192,7 @@ export default {
         params: this.piBenchParams,
         env: this.env
       };
-      const response = await postBenchmark(data);
+      const response = await postBenchmark(this.formBasic.backend, data);
       if (response["result"] !== "Ok") {
         this.$message("Server Error!");
         console.log(response);
@@ -212,14 +212,25 @@ export default {
       let serverStatus = { status: "running" };
       do {
         await wait(1000);
-        serverStatus = await fetchServerStatus(this.serverResponse["pid"]);
+        serverStatus = await fetchServerStatus(
+          this.formBasic.backend,
+          this.serverResponse["pid"]
+        );
       } while (serverStatus["status"] === "running");
 
       if (serverStatus["status"] === "finished") {
         this.$message("Server finished the benchmark!");
 
-        const cleanResults = resultParser(serverStatus["data"]);
-        this.$refs.results.updateResults(cleanResults);
+        try {
+          const cleanResults = resultParser(serverStatus["data"]);
+          this.$refs.results.updateResults(cleanResults);
+        } catch {
+          this.$message(
+            "Failed to parse the result, check the console for raw result"
+          );
+          console.log(serverStatus);
+          console.log(serverStatus["data"]);
+        }
       }
     },
     changeBackend(val) {

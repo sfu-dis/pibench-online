@@ -1,4 +1,3 @@
-const API_ENDPOINT = "http://localhost:8000"
 
 export async function fetchInstanceInfo(backendUrl) {
     const response = await fetch(`${backendUrl}/info`);
@@ -6,8 +5,8 @@ export async function fetchInstanceInfo(backendUrl) {
     return data;
 }
 
-export async function postBenchmark(data) {
-    const response = await fetch(`${API_ENDPOINT}/benchmark`, {
+export async function postBenchmark(backendUrl, data) {
+    const response = await fetch(`${backendUrl}/benchmark`, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -17,8 +16,8 @@ export async function postBenchmark(data) {
     return response.json();
 }
 
-export async function fetchServerStatus(pid) {
-    const response = await fetch(`${API_ENDPOINT}/status?pid=${pid}`);
+export async function fetchServerStatus(backendUrl, pid) {
+    const response = await fetch(`${backendUrl}/status?pid=${pid}`);
     const data = response.json();
     return data;
 }
