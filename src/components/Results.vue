@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-loading="resultLoading">
-    <div id="chart" style="height: 500px; width:500px"></div>
+    <div id="chart" style="height: 400px; width:500px"></div>
     <div>
       <div v-if="benchmarkResults['benchmark_env']">
         <div class="sub-title">Benchmark Environments:</div>
@@ -56,17 +56,28 @@ export default {
       let myChart = echarts.init(document.getElementById("chart"));
       myChart.setOption({
         title: {
-          text: "PiBench Result"
+          text: "Benchmark Result"
         },
         tooltip: {},
         xAxis: {
           type: "category",
+          name: "Time",
           data: data["samplings"].map((_, index) => {
-            return data["sample_time"] * index;
+            return this.benchmarkResults["sample_time"] * index;
           })
         },
         yAxis: {
-          type: "value"
+          type: "value",
+          name: "Throughput",
+          axisLabel: {
+            formatter: value => {
+              return (
+                ((value / 1000000) * 1000) /
+                  this.benchmarkResults["sample_time"].toFixed(2) +
+                " M"
+              );
+            }
+          }
         },
         series: [
           {

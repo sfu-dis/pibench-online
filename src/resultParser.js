@@ -15,11 +15,14 @@ const benchmarkRegex = {
 }
 
 const samplingRegex = new RegExp('Samples:\\n([\\s\\d+\\n?]*)');
+const smaplingTimeRegex = new RegExp(`Sampling:\\s(${floatingRegex})`);
 
 export function resultParser(rawData) {
+    console.log(rawData);
     let result = {
         'basics': {},
-        'benchmark_env': {}
+        'benchmark_env': {},
+        'sample_time': parseInt(smaplingTimeRegex.exec(rawData)[1]),
     }
     let all_entries = Object.entries(envRegex);
     for (let i = 0; i < all_entries.length; i++) {

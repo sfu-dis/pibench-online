@@ -224,10 +224,11 @@ export default {
         try {
           const cleanResults = resultParser(serverStatus["data"]);
           this.$refs.results.updateResults(cleanResults);
-        } catch {
+        } catch(error) {
           this.$message(
             "Failed to parse the result, check the console for raw result"
           );
+          console.error(error);
           console.log(serverStatus);
           console.log(serverStatus["data"]);
         }
