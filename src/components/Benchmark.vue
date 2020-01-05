@@ -223,8 +223,12 @@ export default {
 
         try {
           const cleanResults = resultParser(serverStatus["data"]);
-          this.$refs.results.updateResults(cleanResults);
-        } catch(error) {
+          this.$refs.results.updateResults(cleanResults, {
+            basic: this.formBasic,
+            params: this.piBenchParams,
+            env: this.env
+          });
+        } catch (error) {
           this.$message(
             "Failed to parse the result, check the console for raw result"
           );

@@ -1,19 +1,10 @@
 <template>
-  <div
-    class="container"
-    v-loading="resultLoading"
-  >
-    <div
-      id="chart"
-      style="height: 400px; width:500px"
-    ></div>
+  <div class="container" v-loading="resultLoading">
+    <div id="chart" style="height: 400px; width:500px"></div>
     <div>
       <div v-if="benchmarkResults['benchmark_env']">
         <div class="sub-title">Benchmark Environments:</div>
-        <div
-          v-for="item in Object.entries(benchmarkResults['benchmark_env'])"
-          :key="item[0]"
-        >
+        <div v-for="item in Object.entries(benchmarkResults['benchmark_env'])" :key="item[0]">
           <div style="display: flex;">
             <div class="result-category">{{item[0]}}</div>
             <div class="result-value">{{item[1]}}</div>
@@ -22,48 +13,39 @@
       </div>
       <div v-if="benchmarkResults['basics']">
         <div class="sub-title">Basic Results:</div>
-        <div
-          v-for="item in basicResults"
-          :key="item[0]"
-        >
+        <div v-for="item in basicResults" :key="item[0]">
           <div style="display: flex;">
             <div class="result-category">{{item[0]}}</div>
             <div class="result-value">{{item[1]}}</div>
           </div>
         </div>
       </div>
-      <div
-        style="margin-top:1em;"
-        v-if="benchmarkResults['pcm_results']"
-      >
+      <div style="margin-top:1em;" v-if="benchmarkResults['pcm_results']">
         <div>PCM Results:</div>
-        <div
-          v-for="item in Object.entries(benchmarkResults['pcm_results'])"
-          :key="item[0]"
-        >
+        <div v-for="item in Object.entries(benchmarkResults['pcm_results'])" :key="item[0]">
           <span class="result-category">{{item[0]}}</span>
           {{item[1]}}
         </div>
       </div>
     </div>
-    <section>
-      <el-button
-        size="small"
-        @click="saveResult"
-      >Save Result</el-button>
+    <section style="margin-top: 1em;">
+      <el-button size="small" @click="saveResult">Save Result</el-button>
     </section>
   </div>
 </template>
 
 <script>
 import echarts from "echarts";
+import { mapState, mapMutations } from "vuex";
+
 export default {
   name: "Results",
   props: {},
   data() {
-    return { resultLoading: false, benchmarkResults: {} };
+    return { resultLoading: true, benchmarkResults: {}, benchmarkParams: {} };
   },
   computed: {
+    ...mapState(["benchmarkResults"]),
     basicResults() {
       return Object.entries(this.benchmarkResults["basics"]).filter(
         item => item[0] !== "samplings"
@@ -71,13 +53,19 @@ export default {
     }
   },
   methods: {
-    updateResults(results) {
+    ...mapMutations(["addBenchmarkResult"]),
+    updateResults(results, params) {
       this.benchmarkResults = results;
+      this.benchmarkParams = params;
       console.log(results);
       this.plotFigure(results["basics"]);
     },
     saveResult() {
-      console.log("commit");
+      this.addBenchmarkResult({
+        result: this.benchmarkResults,
+        param: this.benchmarkParams
+      });
+      this.$message("Benchmark result saved!");
     },
     plotFigure(data) {
       let myChart = echarts.init(document.getElementById("chart"));
@@ -90,7 +78,7 @@ export default {
           type: "category",
           name: "Time",
           data: data["samplings"].map((_, index) => {
-            return this.benchmarkResults["sample_time"] * index;
+            return this.benchmarkParams.params["sample_time"] * index;
           })
         },
         yAxis: {
@@ -100,7 +88,7 @@ export default {
             formatter: value => {
               return (
                 ((value / 1000000) * 1000) /
-                  this.benchmarkResults["sample_time"].toFixed(2) +
+                  this.benchmarkParams.params["sample_time"].toFixed(2) +
                 " M"
               );
             }

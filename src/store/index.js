@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const state = {
   backends: [],
-  configPresets: []
+  configPresets: [],
+  benchmarkResults: []
 };
 
 const mutations = {
@@ -22,6 +23,9 @@ const mutations = {
   },
   addConfigPreset(state, preset) {
     state.configPresets.push(preset);
+  },
+  addBenchmarkResult(state, { result, param }) {
+    state.benchmarkResults.push({ param, result });
   }
 }
 

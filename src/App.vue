@@ -3,6 +3,7 @@
     <el-menu :default-active="menuActiveIndex" :router="true" mode="horizontal">
       <el-menu-item>PiBench Online</el-menu-item>
       <el-menu-item index="benchmark">Benchmark</el-menu-item>
+      <el-menu-item index="analyze">Analyze</el-menu-item>
       <el-menu-item index="settings">Settings</el-menu-item>
     </el-menu>
 
