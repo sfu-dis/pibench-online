@@ -26,6 +26,9 @@ const mutations = {
   },
   addBenchmarkResult(state, { result, param }) {
     state.benchmarkResults.push({ param, result });
+  },
+  updateBenchmarkResults(state, newResults) {
+    state.benchmarkResults = newResults;
   }
 }
 

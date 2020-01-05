@@ -17,7 +17,7 @@
         <el-table-column prop="result.basics.Throughput" label="Throughput"></el-table-column>
       </el-table>
       <section style="margin-top:1em;">
-        <el-button size="mini" plain type="danger">Delete Selected</el-button>
+        <el-button @click="deleteSelected" size="mini" plain type="danger">Delete Selected</el-button>
       </section>
     </el-card>
   </div>
@@ -29,13 +29,23 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "Analyze",
   props: {},
+  data() {
+    return { currentSelected: {} };
+  },
   computed: {
     ...mapState(["benchmarkResults"])
   },
   methods: {
-    ...mapMutations(["addBenchmarkResult"]),
+    ...mapMutations(["addBenchmarkResult", "updateBenchmarkResults"]),
     handleSelectionChange(val) {
-      console.log(val);
+      this.currentSelected = val;
+    },
+    deleteSelected() {
+      let self = this;
+      const newBenchResults = this.benchmarkResults.filter(item => {
+        return self.currentSelected.indexOf(item) === -1;
+      });
+      this.updateBenchmarkResults(newBenchResults);
     }
   }
 };
