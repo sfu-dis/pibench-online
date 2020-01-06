@@ -37,6 +37,7 @@
 <script>
 import echarts from "echarts";
 import { mapState, mapMutations } from "vuex";
+let cloneDeep = require("lodash/cloneDeep");
 
 export default {
   name: "Results",
@@ -62,8 +63,8 @@ export default {
     },
     saveResult() {
       this.addBenchmarkResult({
-        result: this.benchmarkResults,
-        param: this.benchmarkParams
+        result: cloneDeep(this.benchmarkResults),
+        param: cloneDeep(this.benchmarkParams)
       });
       this.$message("Benchmark result saved!");
     },

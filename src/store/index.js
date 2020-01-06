@@ -19,7 +19,7 @@ const mutations = {
   },
 
   deleteBackend(state, index) {
-    state.backends = state.backends.splice(index, 1);
+    state.backends.splice(index, 1);
   },
   addConfigPreset(state, preset) {
     state.configPresets.push(preset);

@@ -3,98 +3,62 @@
     <el-card>
       <h3>Backends</h3>
       <section style="display: flex;">
-        <el-form
-          size="mini"
-          :key="`backend-${index}`"
-          v-for="(item,index) in backends"
-          label-position="right"
-          @submit.native.prevent
-          class="form-section"
-        >
-          <el-form-item label="URL:">{{item['url']}}</el-form-item>
-          <el-form-item label="Has PM:">
-            <el-switch
-              :disabled="true"
-              :value="item['has_pm']"
-            ></el-switch>
-          </el-form-item>
-          <el-form-item label="Core Count:">
-            <el-input
-              :value="item['core_cnt']"
-              :disabled="true"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="Socket Count:">
-            <el-input
-              :value="item['socket_cnt']"
-              :disabled="true"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="Avaliable Wrappers:">
-            <el-tag
-              closable
-              size="small"
-              v-for="wrapper in item['wrappers']"
-              :key="wrapper"
-              @close="removeWrapper(index, wrapper)"
-            >{{wrapper}}</el-tag>
-
-            <el-upload
-              name="wrapper"
-              action="http://dbserver.haoxp.xyz:8000/upload_wrapper/"
-              :show-file-list="false"
-              :on-success="updateBackend(index)"
-              :on-error="uploadFailed"
-            >
-              <el-button plain>Upload Wrapper</el-button>
-            </el-upload>
-          </el-form-item>
-
-          <el-form-item>
+        <div :key="`backend-${index}`" v-for="(item,index) in backends" class="form-section">
+          <div style=" z-index: 999">
             <el-button
               plain
-              type="danger"
+              type="text"
+              style="float: right; padding: 3px 0;"
               @click="deleteBackend(index)"
             >Delete</el-button>
-          </el-form-item>
-        </el-form>
-      </section>
-      <el-button
-        type="primary"
-        size="mini"
-        @click="dialogVisible=true"
-      >Add New Backend</el-button>
+          </div>
+          <el-form style="z-index:-1;" size="mini" label-position="right" @submit.native.prevent label-width="8em">
+            <el-form-item label="URL:">{{item['url']}}</el-form-item>
 
-      <el-dialog
-        title="Add Backend"
-        :visible.sync="dialogVisible"
-        width="40%"
-      >
-        <el-form :inline="true">
-          <el-form-item label="PiBench Backend URL:">
-            <el-input v-model="backendUrlInput"></el-input>
+            <el-form-item label="Has PM:">{{item['has_pm']}}</el-form-item>
+            <el-form-item label="Core Count:">{{item['core_cnt']}}</el-form-item>
+            <el-form-item label="Socket Count:">{{item['socket_cnt']}}</el-form-item>
+            <el-form-item label="Wrappers:">
+              <el-tag
+                closable
+                size="small"
+                v-for="wrapper in item['wrappers']"
+                :key="wrapper"
+                @close="removeWrapper(index, wrapper)"
+              >{{wrapper}}</el-tag>
+              <el-upload
+                name="wrapper"
+                action="http://dbserver.haoxp.xyz:8000/upload_wrapper/"
+                :show-file-list="false"
+                :on-success="updateBackend(index)"
+                :on-error="uploadFailed"
+              >
+                <el-button plain>Upload</el-button>
+              </el-upload>
+            </el-form-item>
+          </el-form>
+        </div>
+      </section>
+      <el-button type="primary" size="mini" @click="dialogVisible=true">Add New Backend</el-button>
+
+      <el-dialog title="Add New Backend" :visible.sync="dialogVisible" width="35%">
+        <el-form inline label-width="10em">
+          <el-form-item label="Name:">
+            <el-input v-model="newBackendConfig.name"></el-input>
+          </el-form-item>
+          <el-form-item label="Backend URL:">
+            <el-input v-model="newBackendConfig.url"></el-input>
           </el-form-item>
         </el-form>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+        <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button
-            type="primary"
-            @click="addBackend"
-          >Confirm</el-button>
+          <el-button type="primary" @click="addBackend">Confirm</el-button>
         </span>
       </el-dialog>
     </el-card>
     <el-card>
       <h3>Cache</h3>
-      <el-button
-        type="danger"
-        size="mini"
-        plain
-        @click="cleanStorage"
-      >Reset local storage</el-button>
+      <el-button type="danger" size="mini" plain @click="cleanStorage">Reset local storage</el-button>
     </el-card>
   </div>
 </template>
@@ -110,7 +74,10 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      backendUrlInput: "http://home.haoxp.xyz:7000"
+      newBackendConfig: {
+        name: "home-server",
+        url: "http://home.haoxp.xyz:7000"
+      }
     };
   },
   methods: {
@@ -125,8 +92,12 @@ export default {
     },
     async addBackend() {
       try {
-        const data = await fetchInstanceInfo(this.backendUrlInput);
-        this.addBackendStore(data);
+        const data = await fetchInstanceInfo(this.newBackendConfig.url);
+        this.addBackendStore({
+          ...data,
+          url: this.newBackendConfig.url,
+          name: this.newBackendConfig.name
+        });
         this.dialogVisible = false;
       } catch {
         this.$message("Invalid backend!");
@@ -178,6 +149,9 @@ section .el-input {
 }
 .el-card {
   margin-bottom: 1em;
+}
+.el-form-item {
+  margin-bottom: 0.5em;
 }
 </style>
 
