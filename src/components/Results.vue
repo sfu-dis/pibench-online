@@ -48,7 +48,7 @@ export default {
   computed: {
     basicResults() {
       return Object.entries(this.benchmarkResults["basics"]).filter(
-        item => item[0] !== "samplings"
+        item => item[0] !== "samplings" && item[0] !== "latency"
       );
     }
   },
@@ -73,31 +73,80 @@ export default {
         title: {
           text: "Benchmark Result"
         },
-        tooltip: {},
-        xAxis: {
-          type: "category",
-          name: "Time",
-          data: data["samplings"].map((_, index) => {
-            return this.benchmarkParams.params["sample_time"] * index;
-          })
+        tooltip: {
+          trigger: "axis",
         },
-        yAxis: {
-          type: "value",
-          name: "Throughput",
-          axisLabel: {
-            formatter: value => {
-              return (
-                ((value / 1000000) * 1000) /
-                  this.benchmarkParams.params["sample_time"].toFixed(2) +
-                " M"
-              );
-            }
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false, title: "Dataview" },
+            restore: { show: true, title: "Restore" },
+            saveAsImage: { show: true, title: "Save As Image" }
           }
         },
+        grid: [
+          {
+            height: "32%"
+          },
+          {
+            top: "60%",
+            height: "32%"
+          }
+        ],
+        xAxis: [
+          {
+            type: "category",
+            name: "Time",
+            data: data["samplings"].map((_, index) => {
+              return this.benchmarkParams.params["sample_time"] * index;
+            }),
+            gridIndex: 0,
+            axisLine: { onZero: true }
+          },
+          {
+            type: "category",
+            name: "Sampling",
+            data: this.benchmarkResults.basics["latency"].labels,
+            position: "top",
+            gridIndex: 1,
+            axisLine: { onZero: true }
+            // boundaryGap: false
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            name: "Throughput",
+            axisLabel: {
+              formatter: value => {
+                return (
+                  ((value / 1000000) * 1000) /
+                    this.benchmarkParams.params["sample_time"].toFixed(2) +
+                  " M"
+                );
+              }
+            },
+            gridIndex: 0
+          },
+          {
+            type: "value",
+            name: "Latency (ns)",
+            inverse: true,
+            gridIndex: 1
+          }
+        ],
         series: [
           {
             type: "line",
-            data: data["samplings"]
+            data: data["samplings"],
+            xAxisIndex: 0,
+            yAxisIndex: 0
+          },
+          {
+            type: "line",
+            data: this.benchmarkResults.basics["latency"].values,
+            // data: [1, 2, 3, 4, 5, 6],
+            xAxisIndex: 1,
+            yAxisIndex: 1
           }
         ]
       });

@@ -15,6 +15,7 @@ const benchmarkRegex = {
 }
 
 const samplingRegex = new RegExp('Samples:\\n([\\s\\d+\\n?]*)');
+const latencyRegex = new RegExp('Latencies \\(.*\\):\\n([\\w\\d\\.%+\\:\\s\\d+\\n?]*)')
 
 export function resultParser(rawData) {
     console.log(rawData);
@@ -36,5 +37,19 @@ export function resultParser(rawData) {
 
     let samplingResult = samplingRegex.exec(rawData)[1];
     result['basics']['samplings'] = samplingResult.split('\n').map(item => item.trim()).filter(item => item);
+
+    try {
+        const latencyResult = latencyRegex.exec(rawData)[1];
+        const parsed = latencyResult.split("\n").filter(item => item).map(item => item.trim().split(':'));
+        console.log(parsed);
+        const keys = parsed.map(item => item[0]);
+        const values = parsed.map(item => parseInt(item[1].trim()));
+        result["basics"]["latency"] = {
+            labels: keys,
+            values: values
+        }
+    } catch (error) {
+        console.log("no latency found:", error);
+    }
     return result;
 }
