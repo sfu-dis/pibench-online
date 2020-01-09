@@ -118,7 +118,7 @@
         </el-form>
       </el-card>
       <el-card class="result-zone" v-if="showResult">
-        <results ref="results"></results>
+        <results ref="results" v-loading="resultLoading"></results>
       </el-card>
     </section>
   </div>
@@ -199,6 +199,7 @@ export default {
         return;
       }
       this.$message("Benchmark started!");
+      this.resultLoading = true;
       this.serverResponse = response;
       await this.checkServerStatus();
     },
@@ -228,6 +229,7 @@ export default {
             params: this.piBenchParams,
             env: this.env
           });
+          this.resultLoading = false;
         } catch (error) {
           this.$message(
             "Failed to parse the result, check the console for raw result"

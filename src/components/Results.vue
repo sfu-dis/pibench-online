@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading="resultLoading">
+  <div class="container">
     <div id="chart" style="height: 400px; width:500px"></div>
     <div>
       <div v-if="benchmarkResults['benchmark_env']">
@@ -36,17 +36,16 @@
 
 <script>
 import echarts from "echarts";
-import { mapState, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 let cloneDeep = require("lodash/cloneDeep");
 
 export default {
   name: "Results",
   props: {},
   data() {
-    return { resultLoading: true, benchmarkResults: {}, benchmarkParams: {} };
+    return { benchmarkResults: {}, benchmarkParams: {} };
   },
   computed: {
-    ...mapState(["benchmarkResults"]),
     basicResults() {
       return Object.entries(this.benchmarkResults["basics"]).filter(
         item => item[0] !== "samplings"
@@ -102,7 +101,6 @@ export default {
           }
         ]
       });
-      this.resultLoading = false;
     }
   }
 };
