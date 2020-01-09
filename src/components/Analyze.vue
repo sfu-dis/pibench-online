@@ -5,11 +5,12 @@
       <el-table size="small" :data="benchmarkResults" @selection-change="handleSelectionChange">
         <el-table-column fixed type="selection" width="55"></el-table-column>
         <el-table-column
-          v-for="item in tableOptions"
+          v-for="item in tableColumns"
           :fixed="item['fixed']"
           :prop="item['prop']"
           :label="item['label']"
           :key="item['label']"
+          sortable
         ></el-table-column>
       </el-table>
       <section style="margin-top:1em; margin-bottom: 2em;">
@@ -73,6 +74,8 @@ export default {
   data() {
     return {
       currentSelected: {},
+      figureSelect: {},
+      allFigures: [],
       tableOptions: [
         {
           fixed: true,
@@ -91,14 +94,29 @@ export default {
         { prop: "param.params.key_size", label: "Key Size" },
         { prop: "param.params.value_size", label: "Value Size" },
         { prop: "param.params.op_cnt", label: "OP Count" },
-        { fixed: true, prop: "result.basics.Throughput", label: "Throughput" }
-      ],
-      figureSelect: {},
-      allFigures: []
+        { fixed: true, prop: "result.basics.Throughput", label: "Throughput" },
+        {
+          hidden: true,
+          type: "array",
+          prop: "result.basics.latency",
+          label: "Latency"
+        },
+        {
+          hidden: true,
+          type: "array",
+          prop: "result.basics.samplings",
+          label: "Sampling"
+        }
+      ]
     };
   },
   computed: {
-    ...mapState(["benchmarkResults"])
+    ...mapState(["benchmarkResults"]),
+    tableColumns() {
+      return this.tableOptions.filter(item => {
+        return !item["hidden"];
+      });
+    }
   },
   methods: {
     ...mapMutations(["addBenchmarkResult", "updateBenchmarkResults"]),
@@ -112,20 +130,37 @@ export default {
       });
       this.updateBenchmarkResults(newBenchResults);
     },
-    plotFigure() {
-      let self = this;
-      const xValues = this.currentSelected.map(item => {
-        return get(item, self.figureSelect.x.prop);
-      });
-      const yValues = this.currentSelected.map(item => {
-        return get(item, self.figureSelect.y.prop);
+    getLatencyOption(xValues, yValues) {
+      const series = yValues.map(item => {
+        return { type: "line", data: item.values };
       });
       const newOption = {
-        title: {
-          text: "Benchmark Result"
+        xAxis: {
+          name: "Sampling",
+          data: yValues[0].labels
         },
-        grid: { left: "15%", right: "15%" },
-        tooltip: {},
+        dataZoom: [
+          {
+            show: true,
+            filterMode: "empty",
+            yAxisIndex: 0
+          }
+        ],
+        yAxis: {
+          name: "Latency ",
+          axisLabel: {
+            formatter: value => {
+              return value / 1000 + " us";
+            }
+          }
+        },
+        series: [...series]
+      };
+      return newOption;
+    },
+    getNormalOption(xValues, yValues) {
+      let series = { type: "line", data: yValues };
+      const newOption = {
         xAxis: {
           name: this.figureSelect.x.label,
           data: xValues
@@ -133,21 +168,56 @@ export default {
         yAxis: {
           name: this.figureSelect.y.label
         },
-        series: [
-          {
-            type: "line",
-            data: yValues
-          }
-        ]
+        series
       };
-      this.allFigures.push(cloneDeep(newOption));
+      return newOption;
+    },
+    plotFigure() {
+      let self = this;
+      if (this.figureSelect.x["type"] === "array") {
+        this.$message("x type not supported");
+        return;
+      }
+      const xValues = this.currentSelected.map(item => {
+        return get(item, self.figureSelect.x.prop);
+      });
+      const yValues = this.currentSelected.map(item => {
+        return get(item, self.figureSelect.y.prop);
+      });
+
+      let options = {};
+      if (this.figureSelect.y["label"] === "Latency") {
+        options = this.getLatencyOption(xValues, yValues);
+      } else if (this.figureSelect.y["label"] === "Sampling") {
+        this.$message("Not supported!");
+      } else {
+        options = this.getNormalOption(xValues, yValues);
+      }
+      options = {
+        ...options,
+        title: {
+          text: "Benchmark Result"
+        },
+        grid: { left: "15%", right: "15%" },
+        tooltip: {
+          trigger: "axis"
+        },
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false, title: "Dataview" },
+            restore: { show: true, title: "Restore" },
+            saveAsImage: { show: true, title: "Save As Image" }
+          }
+        }
+      };
+      this.allFigures.push(cloneDeep(options));
 
       this.$nextTick(function() {
         let dom = document.getElementById(
           "figure-" + (self.allFigures.length - 1)
         );
         let newChart = echarts.init(dom);
-        newChart.setOption(newOption);
+        newChart.setOption(options);
       });
     }
   }
