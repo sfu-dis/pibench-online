@@ -14,10 +14,11 @@
           <el-form-item label="Backend">
             <el-select
               @change="changeBackend"
-              :value="formBasic.backend"
+              v-model="selectedBackend"
               placeholder="Select Backend"
+              value-key="name"
             >
-              <el-option v-for="item in backends" :key="item.url" :label="item.url" :value="item"></el-option>
+              <el-option v-for="item in backends" :key="item.name" :label="item.name" :value="item"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Wrapper">
@@ -167,7 +168,8 @@ export default {
       env: "PMEM_IS_PMEM_FORCE=1,",
       showResult: false,
       resultLoading: true,
-      serverResponse: {}
+      serverResponse: {},
+      selectedBackend: {}
     };
   },
   computed: mapState(["backends", "configPresets"]),

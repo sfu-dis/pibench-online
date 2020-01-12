@@ -13,6 +13,7 @@
             >Delete</el-button>
           </div>
           <el-form style="z-index:-1;" size="mini" label-position="right" @submit.native.prevent label-width="8em">
+            <el-form-item label="Name:">{{item['name']}}</el-form-item>
             <el-form-item label="URL:">{{item['url']}}</el-form-item>
 
             <el-form-item label="Has PM:">{{item['has_pm']}}</el-form-item>

@@ -74,7 +74,7 @@ export default {
           text: "Benchmark Result"
         },
         tooltip: {
-          trigger: "axis",
+          trigger: "axis"
         },
         toolbox: {
           feature: {
@@ -131,7 +131,12 @@ export default {
             type: "value",
             name: "Latency (ns)",
             inverse: true,
-            gridIndex: 1
+            gridIndex: 1,
+            axisLabel: {
+              formatter: value => {
+                return value / 1000 + " us";
+              }
+            }
           }
         ],
         series: [
