@@ -144,14 +144,15 @@ export default {
             type: "line",
             data: data["samplings"],
             xAxisIndex: 0,
-            yAxisIndex: 0
+            yAxisIndex: 0,
+            name: "Samplings"
           },
           {
             type: "line",
             data: this.benchmarkResults.basics["latency"].values,
-            // data: [1, 2, 3, 4, 5, 6],
             xAxisIndex: 1,
-            yAxisIndex: 1
+            yAxisIndex: 1,
+            name: "Latency"
           }
         ]
       });

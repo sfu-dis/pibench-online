@@ -131,8 +131,12 @@ export default {
       this.updateBenchmarkResults(newBenchResults);
     },
     getLatencyOption(xValues, yValues) {
-      const series = yValues.map(item => {
-        return { type: "line", data: item.values };
+      const series = yValues.map((item, index) => {
+        return {
+          type: "line",
+          data: item.values,
+          name: `${this.figureSelect.x.label} ${xValues[index]}`
+        };
       });
       const newOption = {
         xAxis: {
@@ -159,7 +163,11 @@ export default {
       return newOption;
     },
     getNormalOption(xValues, yValues) {
-      let series = { type: "line", data: yValues };
+      let series = {
+        type: "line",
+        data: yValues,
+        name: this.figureSelect.y.label
+      };
       const newOption = {
         xAxis: {
           name: this.figureSelect.x.label,
