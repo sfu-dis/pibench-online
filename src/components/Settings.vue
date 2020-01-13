@@ -4,21 +4,14 @@
       <h3>Backends</h3>
       <section style="display: flex;">
         <div :key="`backend-${index}`" v-for="(item,index) in backends" class="form-section">
-          <div style=" z-index: 999">
-            <el-button
-              plain
-              type="text"
-              style="float: right; padding: 3px 0;"
-              @click="deleteBackend(index)"
-            >Delete</el-button>
-          </div>
-          <el-form
-            style="z-index:-1;"
-            size="mini"
-            label-position="right"
-            @submit.native.prevent
-            label-width="8em"
-          >
+          <el-form size="mini" label-position="right" @submit.native.prevent label-width="8em">
+            <div style="height: 1em;">
+              <el-button
+                type="text"
+                style="float: right; padding: 3px 0;"
+                @click="deleteBackend(index)"
+              >Delete</el-button>
+            </div>
             <el-form-item label="Name:">{{item['name']}}</el-form-item>
             <el-form-item label="URL:">{{item['url']}}</el-form-item>
 
@@ -120,7 +113,7 @@ export default {
               ...targetBackend,
               ...data
             };
-            self.updateBackendStore({ index, backend: newData});
+            self.updateBackendStore({ index, backend: newData });
           });
         } catch {
           this.$message("Invalid backend!");
