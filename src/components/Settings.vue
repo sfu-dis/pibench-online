@@ -12,7 +12,13 @@
               @click="deleteBackend(index)"
             >Delete</el-button>
           </div>
-          <el-form style="z-index:-1;" size="mini" label-position="right" @submit.native.prevent label-width="8em">
+          <el-form
+            style="z-index:-1;"
+            size="mini"
+            label-position="right"
+            @submit.native.prevent
+            label-width="8em"
+          >
             <el-form-item label="Name:">{{item['name']}}</el-form-item>
             <el-form-item label="URL:">{{item['url']}}</el-form-item>
 
@@ -29,7 +35,7 @@
               >{{wrapper}}</el-tag>
               <el-upload
                 name="wrapper"
-                action="http://dbserver.haoxp.xyz:8000/upload_wrapper/"
+                :action="`${item.url}/upload_wrapper/`"
                 :show-file-list="false"
                 :on-success="updateBackend(index)"
                 :on-error="uploadFailed"
@@ -110,7 +116,11 @@ export default {
           let self = this;
           const targetBackend = this.backends[index];
           fetchInstanceInfo(targetBackend.url).then(data => {
-            self.updateBackendStore({ index, backend: data });
+            const newData = {
+              ...targetBackend,
+              ...data
+            };
+            self.updateBackendStore({ index, backend: newData});
           });
         } catch {
           this.$message("Invalid backend!");
