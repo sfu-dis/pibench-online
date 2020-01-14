@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 const state = {
   backends: [],
+  showAbout: true,
   configPresets: [],
   benchmarkResults: []
 };
@@ -13,6 +14,9 @@ const state = {
 const mutations = {
   addBackend(state, backend) {
     state.backends.push(backend);
+  },
+  setShowAbout(state, show) {
+    state.showAbout = show;
   },
   updateBackend(state, { index, backend }) {
     Vue.set(state.backends, index, backend);
