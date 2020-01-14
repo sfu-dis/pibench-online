@@ -9,7 +9,7 @@
 
     <el-dialog
       class="dialog-content"
-      title="PiBench Online?"
+      title="PiBench Online"
       :visible.sync="dialogVisible"
       width="50%"
     >
