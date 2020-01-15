@@ -1,3 +1,8 @@
+// Copyright (c) Simon Fraser University. All rights reserved.
+// Licensed under the MIT license.
+
+// Authors:
+// Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 
 export async function fetchInstanceInfo(backendUrl) {
     const response = await fetch(`${backendUrl}/info`);

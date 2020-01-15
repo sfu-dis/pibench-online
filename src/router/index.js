@@ -1,3 +1,9 @@
+// Copyright (c) Simon Fraser University. All rights reserved.
+// Licensed under the MIT license.
+
+// Authors:
+// Xiangpeng Hao <xiangpeng_hao@sfu.ca>
+
 import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)

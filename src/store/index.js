@@ -1,3 +1,9 @@
+// Copyright (c) Simon Fraser University. All rights reserved.
+// Licensed under the MIT license.
+
+// Authors:
+// Xiangpeng Hao <xiangpeng_hao@sfu.ca>
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate";
