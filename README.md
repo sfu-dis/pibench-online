@@ -1,4 +1,4 @@
-# PiBench Online Frontend
+# PiBench Online
 
 Online demo: http://pibench.org
 
