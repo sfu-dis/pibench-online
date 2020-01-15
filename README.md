@@ -1,4 +1,6 @@
-# PiBench Online
+# PiBench Online 
+
+[![Build Status](https://travis-ci.org/XiangpengHao/pibench-online.svg?branch=master)](https://travis-ci.org/XiangpengHao/pibench-online)
 
 Online demo: http://pibench.org
 
