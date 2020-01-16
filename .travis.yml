@@ -18,9 +18,6 @@ cache:
   directories:
   - node_modules
 
-before_deploy:
-- echo pibench.haoxp.xyz > dist/CNAME
-
 deploy:
   provider: pages
   skip_cleanup: true
