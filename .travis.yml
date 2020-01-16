@@ -20,6 +20,7 @@ cache:
 deploy:
   provider: pages
   github_token: $GITHUB_TOKEN
+  skip_cleanup: true
   local_dir: dist
   target-branch: gh-pages
   on:
