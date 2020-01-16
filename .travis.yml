@@ -13,14 +13,12 @@ install:
 script:
   - yarn build
 
-
 cache:
   directories:
   - node_modules
 
 deploy:
   provider: pages
-  skip_cleanup: true
   github_token: $GITHUB_TOKEN
   local_dir: dist
   target-branch: gh-pages
