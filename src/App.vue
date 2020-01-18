@@ -46,6 +46,11 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
         Contribute to PiBench:
         <a href="https://github.com/wangtzh/pibench">PiBench GitHub</a>
       </p>
+
+      <p>
+        Discussion:
+        <a href="https://groups.google.com/forum/#!forum/pibench">Google Group</a>
+      </p>
       <p>
         Request PiBench resources:
         <a href="mailto:support@pibench.org">support@pibench.org</a>
