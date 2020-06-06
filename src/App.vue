@@ -8,10 +8,15 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 
 <template>
   <div id="app">
-    <el-menu :default-active="menuActiveIndex" :router="true" mode="horizontal">
+    <el-menu
+      :default-active="menuActiveIndex"
+      :router="true"
+      mode="horizontal"
+    >
       <el-menu-item @click="dialogVisible=true">PiBench Online</el-menu-item>
       <el-menu-item index="benchmark">Benchmark</el-menu-item>
       <el-menu-item index="analyze">Analyze</el-menu-item>
+      <el-menu-item index="parser">Parser</el-menu-item>
       <el-menu-item index="settings">Settings</el-menu-item>
     </el-menu>
 
@@ -37,9 +42,7 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
       </p>
       <p>
         Read our paper:
-        <a
-          href="http://www.vldb.org/pvldb/vol13/p574-lersch.pdf"
-        >Evaluating Persistent Memory Range Indexes</a>
+        <a href="http://www.vldb.org/pvldb/vol13/p574-lersch.pdf">Evaluating Persistent Memory Range Indexes</a>
       </p>
 
       <p>
@@ -58,7 +61,10 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
       <p></p>
       <span slot="footer">
         <el-button @click="dontShowAgain">Don't show again</el-button>
-        <el-button type="primary" @click="dialogVisible = false">Ok</el-button>
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+        >Ok</el-button>
       </span>
     </el-dialog>
 
