@@ -11,8 +11,17 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
     <el-card>
       <h3>Backends</h3>
       <section style="display: flex;">
-        <div :key="`backend-${index}`" v-for="(item,index) in backends" class="form-section">
-          <el-form size="mini" label-position="right" @submit.native.prevent label-width="8em">
+        <div
+          :key="`backend-${index}`"
+          v-for="(item,index) in backends"
+          class="form-section"
+        >
+          <el-form
+            size="mini"
+            label-position="right"
+            @submit.native.prevent
+            label-width="8em"
+          >
             <div style="height: 1em;">
               <el-button
                 type="text"
@@ -22,10 +31,14 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
             </div>
             <el-form-item label="Name:">{{item['name']}}</el-form-item>
             <el-form-item label="URL:">{{item['url']}}</el-form-item>
-
             <el-form-item label="Has PM:">{{item['has_pm']}}</el-form-item>
-            <el-form-item label="Core Count:">{{item['core_cnt']}}</el-form-item>
-            <el-form-item label="Socket Count:">{{item['socket_cnt']}}</el-form-item>
+            <el-form-item label="Cores:">{{item.cpu_info['cpu_cnt']}}</el-form-item>
+            <el-form-item label="Sockets:">{{item.cpu_info['socket_cnt']}}</el-form-item>
+            <el-form-item label="L1d Cache:">{{item.cpu_info['l1d_cache']}}</el-form-item>
+            <el-form-item label="L1i Cache:">{{item.cpu_info['l1i_cache']}}</el-form-item>
+            <el-form-item label="L2 Cache:">{{item.cpu_info['l2_cache']}}</el-form-item>
+            <el-form-item label="L3 Cache:">{{item.cpu_info['l3_cache']}}</el-form-item>
+            <el-form-item label="Model Name:">{{item.cpu_info['model_name']}}</el-form-item>
             <el-form-item label="Wrappers:">
               <el-tag
                 closable
@@ -41,16 +54,27 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
                 :on-success="updateBackend(index)"
                 :on-error="uploadFailed"
               >
-                <el-button plain>Upload</el-button>
+                <el-button plain>➕</el-button>
               </el-upload>
             </el-form-item>
           </el-form>
         </div>
       </section>
-      <el-button type="primary" size="mini" @click="dialogVisible=true">Add New Backend</el-button>
+      <el-button
+        type="primary"
+        size="mini"
+        @click="dialogVisible=true"
+      >Add New Backend</el-button>
 
-      <el-dialog title="Add New Backend" :visible.sync="dialogVisible" width="35%">
-        <el-form inline label-width="10em">
+      <el-dialog
+        title="Add New Backend"
+        :visible.sync="dialogVisible"
+        width="35%"
+      >
+        <el-form
+          inline
+          label-width="10em"
+        >
           <el-form-item label="Name:">
             <el-input v-model="newBackendConfig.name"></el-input>
           </el-form-item>
@@ -58,15 +82,26 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
             <el-input v-model="newBackendConfig.url"></el-input>
           </el-form-item>
         </el-form>
-        <span slot="footer" class="dialog-footer">
+        <span
+          slot="footer"
+          class="dialog-footer"
+        >
           <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="addBackend">Confirm</el-button>
+          <el-button
+            type="primary"
+            @click="addBackend"
+          >Confirm</el-button>
         </span>
       </el-dialog>
     </el-card>
     <el-card>
       <h3>Cache</h3>
-      <el-button type="danger" size="mini" plain @click="cleanStorage">Reset local storage</el-button>
+      <el-button
+        type="danger"
+        size="mini"
+        plain
+        @click="cleanStorage"
+      >Reset local storage</el-button>
     </el-card>
   </div>
 </template>
@@ -163,7 +198,8 @@ section .el-input {
   margin-bottom: 1em;
 }
 .el-form-item {
-  margin-bottom: 0.5em;
+  margin-bottom: 0em;
+  font-family: consolas;
 }
 </style>
 
