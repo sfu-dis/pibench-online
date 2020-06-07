@@ -6,23 +6,27 @@ Authors:
 Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 -->
 <template>
-  <div>
-    <h1>PiBench Parser</h1>
-    <div>Parse the Pibench text result to JSON format</div>
-    <el-button
-      @click="convert_json"
-      size="mini"
-    >Convert</el-button>
+  <div style="margin: 1em 2em 0 2em;">
+    <h1>Frome Pibench std output to JSON</h1>
     <section id="editor-container">
-      <div
-        id="container-src"
-        style="height:60em; width: 45%;"
-      ></div>
-      <div
-        id="container-json"
-        style="height: 60em; width: 45%;"
-      >
-      </div>
+      <el-card>
+        <div
+          id="container-src"
+          style="width: 43vw; height: 80vh;"
+        ></div>
+      </el-card>
+      <el-button
+        @click="convert_json"
+        size="mini"
+        style="height: 3em;"
+      >️Convert ➡️</el-button>
+      <el-card>
+        <div
+          id="container-json"
+          style="width: 43vw; height: 80vh;"
+        >
+        </div>
+      </el-card>
     </section>
   </div>
 </template>
@@ -60,11 +64,8 @@ export default {
   },
   methods: {
     convert_json() {
-      console.log("click convertasdf");
       let value = this.raw_editor.getValue();
-      console.log(value);
       const result = PiBenchData.from_text(value).to_js_value();
-      console.log(result);
       this.json_editor.setValue(JSON.stringify(result));
       let self = this;
       setTimeout(function() {
@@ -79,6 +80,6 @@ export default {
 #editor-container {
   display: flex;
   justify-content: space-between;
-  margin: 1em;
+  /* margin: 1em; */
 }
 </style>

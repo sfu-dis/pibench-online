@@ -5802,8 +5802,10 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-"pibench-parser@file:../pibench-output-parser/pkg":
-  version "0.1.2"
+pibench-parser@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/pibench-parser/-/pibench-parser-0.1.5.tgz#a50de4d822d61f7b8b35ffa3f152abdff9b6cb49"
+  integrity sha512-bwtFO1fkTWDqxnQqHZBaTuveafA55nDK6qh08nm7fXN9DG8+HDalHNpvoxpnWA9cVotN0ZgXa3tmoYt45j8EEw==
 
 pify@^2.0.0:
   version "2.3.0"
