@@ -12,7 +12,7 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
       id="chart"
       style="height: 400px; width:500px"
     ></div>
-    <div>
+    <div v-if="benchmarkResults">
       <div v-if="benchmarkResults['benchmark_env']">
         <div class="sub-title">Benchmark Environments:</div>
         <div
@@ -25,29 +25,33 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           </div>
         </div>
       </div>
-      <div v-if="benchmarkResults['basics']">
+      <div>
         <div class="sub-title">Basic Results:</div>
-        <div
-          v-for="item in basicResults"
-          :key="item[0]"
-        >
-          <div style="display: flex;">
-            <div class="result-category">{{item[0]}}</div>
-            <div class="result-value">{{item[1]}}</div>
-          </div>
+        <div style="display: flex;">
+          <div class="result-category">Run Time</div>
+          <div class="result-value">{{benchmarkResults.results.run_time}}s</div>
+        </div>
+        <div style="display: flex;">
+          <div class="result-category">Load Time</div>
+          <div class="result-value">{{benchmarkResults.results.load_time}}s</div>
+        </div>
+        <div style="display: flex;">
+          <div class="result-category">Throughput</div>
+          <div class="result-value">{{benchmarkResults.results.throughput}} ops/s</div>
         </div>
       </div>
       <div
         style="margin-top:1em;"
-        v-if="benchmarkResults['pcm_results']"
+        v-if="benchmarkResults['results']['pcm']"
       >
-        <div>PCM Results:</div>
+        <div class="sub-title">PCM Results:</div>
         <div
-          v-for="item in Object.entries(benchmarkResults['pcm_results'])"
+          v-for="item in Object.entries(benchmarkResults.results.pcm)"
           :key="item[0]"
+          style="display: flex;"
         >
-          <span class="result-category">{{item[0]}}</span>
-          {{item[1]}}
+          <div class="result-category">{{item[0]}}</div>
+          <div>{{item[1]}}</div>
         </div>
       </div>
     </div>
@@ -69,7 +73,7 @@ export default {
   name: "Results",
   props: {},
   data() {
-    return { benchmarkResults: {}, benchmarkParams: {} };
+    return { benchmarkResults: null, benchmarkParams: null };
   },
   computed: {
     basicResults() {
@@ -83,7 +87,6 @@ export default {
     updateResults(results, params) {
       this.benchmarkResults = results;
       this.benchmarkParams = params;
-      console.log(results);
       this.plotFigure(results);
     },
     saveResult() {

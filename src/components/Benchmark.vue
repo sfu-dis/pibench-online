@@ -210,7 +210,10 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           </el-form-item>
         </el-form>
       </el-card>
-      <el-card class="result-zone">
+      <el-card
+        class="result-zone"
+        v-if="showResult"
+      >
         <results
           ref="results"
           v-loading="resultLoading"
