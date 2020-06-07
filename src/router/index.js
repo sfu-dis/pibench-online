@@ -11,6 +11,8 @@ Vue.use(Router)
 import Benchmark from '@/components/Benchmark';
 import Settings from '@/components/Settings';
 import Analyze from '@/components/Analyze';
+const Parser = () => import('@/components/Parser')
+
 
 export default new Router({
     routes: [
@@ -31,6 +33,10 @@ export default new Router({
             path: "/settings",
             name: "Settings",
             component: Settings
-        }
+        }, {
+            path: "/parser",
+            name: "Parser",
+            component: Parser
+        },
     ]
 })
