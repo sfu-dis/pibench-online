@@ -11,7 +11,8 @@ Vue.use(Router)
 import Benchmark from '@/components/Benchmark';
 import Settings from '@/components/Settings';
 import Analyze from '@/components/Analyze';
-import Parser from '@/components/Parser';
+const Parser = () => import('@/components/Parser')
+
 
 export default new Router({
     routes: [
