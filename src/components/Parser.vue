@@ -7,7 +7,7 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 -->
 <template>
   <div style="margin: 1em 2em 0 2em;">
-    <h1>Frome Pibench std output to JSON</h1>
+    <h1>From Pibench std output to JSON</h1>
     <section id="editor-container">
       <el-card>
         <div
