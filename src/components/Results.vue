@@ -13,20 +13,27 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
       style="height: 400px; width:500px"
     ></div>
     <div v-if="benchmarkResults">
-      <div v-if="benchmarkResults['benchmark_env']">
-        <div class="sub-title">Benchmark Environments:</div>
-        <div
-          v-for="item in Object.entries(benchmarkResults['benchmark_env'])"
-          :key="item[0]"
-        >
-          <div style="display: flex;">
-            <div class="result-category">{{item[0]}}</div>
-            <div class="result-value">{{item[1]}}</div>
-          </div>
+      <div>
+        <div class="sub-title">Benchmark Environments</div>
+        <div style="display: flex;">
+          <div class="result-category">CPU</div>
+          <div class="result-value">{{benchmarkResults.env.cpu}}</div>
+        </div>
+        <div style="display: flex;">
+          <div class="result-category">CPU Cache</div>
+          <div class="result-value">{{benchmarkResults.env.cache}}</div>
+        </div>
+        <div style="display: flex;">
+          <div class="result-category">Kernel</div>
+          <div class="result-value">{{benchmarkResults.env.kernel}}</div>
+        </div>
+        <div style="display: flex;">
+          <div class="result-category">System Time</div>
+          <div class="result-value">{{benchmarkResults.env.time}}</div>
         </div>
       </div>
       <div>
-        <div class="sub-title">Basic Results:</div>
+        <div class="sub-title">Basic Results</div>
         <div style="display: flex;">
           <div class="result-category">Run Time</div>
           <div class="result-value">{{benchmarkResults.results.run_time}}s</div>
@@ -54,13 +61,13 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           <div>{{item[1]}}</div>
         </div>
       </div>
+      <section style="margin-top: 1em;">
+        <el-button
+          size="small"
+          @click="saveResult"
+        >Save Result</el-button>
+      </section>
     </div>
-    <section style="margin-top: 1em;">
-      <el-button
-        size="small"
-        @click="saveResult"
-      >Save Result</el-button>
-    </section>
   </div>
 </template>
 
@@ -139,7 +146,6 @@ export default {
             data: latencyKeys,
             gridIndex: 1,
             axisLine: { onZero: true }
-            // boundaryGap: false
           }
         ],
         yAxis: [
@@ -160,7 +166,6 @@ export default {
           {
             type: "value",
             name: "Latency (ns)",
-            inverse: true,
             gridIndex: 1,
             axisLabel: {
               formatter: value => {
@@ -198,7 +203,7 @@ export default {
 }
 
 .result-value {
-  max-width: 15em;
+  max-width: 20em;
 }
 
 .sub-title {
