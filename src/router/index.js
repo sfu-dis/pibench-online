@@ -8,7 +8,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 
-import Benchmark from '@/components/Benchmark';
+const Benchmark = () => import('@/components/Benchmark');
 import Settings from '@/components/Settings';
 import Analyze from '@/components/Analyze';
 const Parser = () => import('@/components/Parser')

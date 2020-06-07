@@ -8,11 +8,17 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 
 <template>
   <div class="container">
-    <div id="chart" style="height: 400px; width:500px"></div>
+    <div
+      id="chart"
+      style="height: 400px; width:500px"
+    ></div>
     <div>
       <div v-if="benchmarkResults['benchmark_env']">
         <div class="sub-title">Benchmark Environments:</div>
-        <div v-for="item in Object.entries(benchmarkResults['benchmark_env'])" :key="item[0]">
+        <div
+          v-for="item in Object.entries(benchmarkResults['benchmark_env'])"
+          :key="item[0]"
+        >
           <div style="display: flex;">
             <div class="result-category">{{item[0]}}</div>
             <div class="result-value">{{item[1]}}</div>
@@ -21,23 +27,35 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
       </div>
       <div v-if="benchmarkResults['basics']">
         <div class="sub-title">Basic Results:</div>
-        <div v-for="item in basicResults" :key="item[0]">
+        <div
+          v-for="item in basicResults"
+          :key="item[0]"
+        >
           <div style="display: flex;">
             <div class="result-category">{{item[0]}}</div>
             <div class="result-value">{{item[1]}}</div>
           </div>
         </div>
       </div>
-      <div style="margin-top:1em;" v-if="benchmarkResults['pcm_results']">
+      <div
+        style="margin-top:1em;"
+        v-if="benchmarkResults['pcm_results']"
+      >
         <div>PCM Results:</div>
-        <div v-for="item in Object.entries(benchmarkResults['pcm_results'])" :key="item[0]">
+        <div
+          v-for="item in Object.entries(benchmarkResults['pcm_results'])"
+          :key="item[0]"
+        >
           <span class="result-category">{{item[0]}}</span>
           {{item[1]}}
         </div>
       </div>
     </div>
     <section style="margin-top: 1em;">
-      <el-button size="small" @click="saveResult">Save Result</el-button>
+      <el-button
+        size="small"
+        @click="saveResult"
+      >Save Result</el-button>
     </section>
   </div>
 </template>
@@ -66,7 +84,7 @@ export default {
       this.benchmarkResults = results;
       this.benchmarkParams = params;
       console.log(results);
-      this.plotFigure(results["basics"]);
+      this.plotFigure(results);
     },
     saveResult() {
       this.addBenchmarkResult({
@@ -77,6 +95,8 @@ export default {
     },
     plotFigure(data) {
       let myChart = echarts.init(document.getElementById("chart"));
+      let latencyKeys = Object.keys(data.results.latency);
+      let latencyVals = Object.values(data.results.latency);
       myChart.setOption({
         title: {
           text: "Benchmark Result"
@@ -104,8 +124,8 @@ export default {
           {
             type: "category",
             name: "Time",
-            data: data["samplings"].map((_, index) => {
-              return this.benchmarkParams.params["sample_time"] * index;
+            data: data.results["samples"].map((_, index) => {
+              return data.options.sampling * index;
             }),
             gridIndex: 0,
             axisLine: { onZero: true }
@@ -113,8 +133,7 @@ export default {
           {
             type: "category",
             name: "Sampling",
-            data: this.benchmarkResults.basics["latency"].labels,
-            position: "top",
+            data: latencyKeys,
             gridIndex: 1,
             axisLine: { onZero: true }
             // boundaryGap: false
@@ -127,9 +146,9 @@ export default {
             axisLabel: {
               formatter: value => {
                 return (
-                  ((value / 1000000) * 1000) /
-                    this.benchmarkParams.params["sample_time"].toFixed(2) +
-                  " M"
+                  (((value / 1000000) * 1000) / data.options.sampling).toFixed(
+                    2
+                  ) + " M"
                 );
               }
             },
@@ -150,14 +169,14 @@ export default {
         series: [
           {
             type: "line",
-            data: data["samplings"],
+            data: data.results.samples,
             xAxisIndex: 0,
             yAxisIndex: 0,
             name: "Samplings"
           },
           {
             type: "line",
-            data: this.benchmarkResults.basics["latency"].values,
+            data: latencyVals,
             xAxisIndex: 1,
             yAxisIndex: 1,
             name: "Latency"

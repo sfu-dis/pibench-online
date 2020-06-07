@@ -7,7 +7,7 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 -->
 <template>
   <div style="margin: 1em 2em 0 2em;">
-    <h1>From Pibench std output to JSON</h1>
+    <h1>From PiBench std output to JSON</h1>
     <section id="editor-container">
       <el-card>
         <div
@@ -15,11 +15,13 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           style="width: 43vw; height: 80vh;"
         ></div>
       </el-card>
-      <el-button
-        @click="convert_json"
-        size="mini"
-        style="height: 3em;"
-      >️Convert ➡️</el-button>
+      <div>
+        <el-button
+          @click="convert_json"
+          size="mini"
+          style="height: 3em;"
+        >️Convert ➡️</el-button>
+      </div>
       <el-card>
         <div
           id="container-json"
