@@ -8,7 +8,6 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 
 <template>
   <div>
-    <!-- <el-button @click="dialogVisible=true">Add Backend</el-button> -->
     <section style="display:flex;">
       <el-card class="config-zone">
         <el-form
@@ -26,12 +25,25 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
               placeholder="Select Backend"
               value-key="name"
             >
-              <el-option v-for="item in backends" :key="item.name" :label="item.name" :value="item"></el-option>
+              <el-option
+                v-for="item in backends"
+                :key="item.name"
+                :label="item.name"
+                :value="item"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Wrapper">
-            <el-select v-model="formBasic.wrapper" placeholder="Select Wrapper">
-              <el-option v-for="item in wrappers" :key="item" :label="item" :value="item"></el-option>
+            <el-select
+              v-model="formBasic.wrapper"
+              placeholder="Select Wrapper"
+            >
+              <el-option
+                v-for="item in wrappers"
+                :key="item"
+                :label="item"
+                :value="item"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -44,50 +56,113 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           @submit.native.prevent
         >
           <el-form-item label="Threads">
-            <el-input-number v-model="piBenchParams.thread_cnt" :step="1" :min="1" :max="10"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.thread_cnt"
+              :step="1"
+              :min="1"
+              :max="10"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Operations">
-            <el-input-number v-model="piBenchParams.op_cnt" :step="1000" :min="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.op_cnt"
+              :step="1000"
+              :min="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Load Count">
-            <el-input-number v-model="piBenchParams.load_cnt" :step="1" :min="1" :max="10"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.load_cnt"
+              :step="1"
+              :min="1"
+              :max="10"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Read Ratio">
-            <el-input-number v-model="piBenchParams.read" :step="0.1" :min="0" :max="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.read"
+              :step="0.1"
+              :min="0"
+              :max="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Insert Ratio">
-            <el-input-number v-model="piBenchParams.insert" :step="0.1" :min="0" :max="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.insert"
+              :step="0.1"
+              :min="0"
+              :max="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Update Ratio">
-            <el-input-number v-model="piBenchParams.update" :step="0.1" :min="0" :max="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.update"
+              :step="0.1"
+              :min="0"
+              :max="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Delete Ratio">
-            <el-input-number v-model="piBenchParams.delete" :step="0.1" :min="0" :max="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.delete"
+              :step="0.1"
+              :min="0"
+              :max="1"
+            ></el-input-number>
           </el-form-item>
 
           <el-form-item label="Latency Sampling">
-            <el-input-number v-model="piBenchParams.latency_sampling" :step="0.1" :min="0" :max="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.latency_sampling"
+              :step="0.1"
+              :min="0"
+              :max="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Sample Time (ms)">
-            <el-input-number v-model="piBenchParams.sample_time" :step="100" :min="100" :max="2000"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.sample_time"
+              :step="100"
+              :min="100"
+              :max="2000"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Key Size">
-            <el-input-number v-model="piBenchParams.key_size" :min="4" :step="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.key_size"
+              :min="4"
+              :step="1"
+            ></el-input-number>
           </el-form-item>
 
           <el-form-item label="Value Size">
-            <el-input-number v-model="piBenchParams.value_size" :min="4" :step="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.value_size"
+              :min="4"
+              :step="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Scan Size">
-            <el-input-number v-model="piBenchParams.scan_size" :min="1" :step="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.scan_size"
+              :min="1"
+              :step="1"
+            ></el-input-number>
           </el-form-item>
 
           <el-form-item label="Pool Size">
-            <el-input-number v-model="piBenchParams.pool_size" :min="1" :step="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.pool_size"
+              :min="1"
+              :step="1"
+            ></el-input-number>
           </el-form-item>
 
           <el-form-item label="Seed">
-            <el-input-number v-model="piBenchParams.seed" :step="1"></el-input-number>
+            <el-input-number
+              v-model="piBenchParams.seed"
+              :step="1"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Key Prefix">
             <el-input v-model="piBenchParams.key_prefix"></el-input>
@@ -106,7 +181,10 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
           </el-form-item>
 
           <el-form-item label="Distribution">
-            <el-select v-model="piBenchParams.distribution" placeholder="Distribution">
+            <el-select
+              v-model="piBenchParams.distribution"
+              placeholder="Distribution"
+            >
               <el-option
                 v-for="item in possibleDistributions"
                 :key="item"
@@ -116,18 +194,30 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
             </el-select>
           </el-form-item>
           <el-form-item label="Env">
-            <el-input type="textarea" v-model="env"></el-input>
+            <el-input
+              type="textarea"
+              v-model="env"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click="savePreset">Save Preset</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="startBenchmark">Start</el-button>
+            <el-button
+              type="primary"
+              @click="startBenchmark"
+            >Start</el-button>
           </el-form-item>
         </el-form>
       </el-card>
-      <el-card class="result-zone" v-if="showResult">
-        <results ref="results" v-loading="resultLoading"></results>
+      <el-card
+        class="result-zone"
+        v-if="showResult"
+      >
+        <results
+          ref="results"
+          v-loading="resultLoading"
+        ></results>
       </el-card>
     </section>
   </div>
@@ -135,7 +225,7 @@ Xiangpeng Hao <xiangpeng_hao@sfu.ca>
 
 <script>
 import { postBenchmark, fetchServerStatus } from "@/api.js";
-import { resultParser } from "@/resultParser.js";
+import { PiBenchData } from "pibench-parser";
 
 import Results from "@/components/Results.vue";
 
@@ -233,8 +323,12 @@ export default {
         this.$message("Server finished the benchmark!");
 
         try {
-          const cleanResults = resultParser(serverStatus["data"]);
-          this.$refs.results.updateResults(cleanResults, {
+          const pibenchResults = PiBenchData.from_text(
+            serverStatus["data"]
+          ).to_js_value();
+          console.log(pibenchResults);
+
+          this.$refs.results.updateResults(pibenchResults, {
             basic: this.formBasic,
             params: this.piBenchParams,
             env: this.env
