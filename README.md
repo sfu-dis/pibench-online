@@ -2,24 +2,32 @@
 
 [![Build Status](https://travis-ci.org/XiangpengHao/pibench-online.svg?branch=master)](https://travis-ci.org/XiangpengHao/pibench-online)
 
-Online demo: http://pibench.org
-
-![](src/assets/readme-demo.gif)
-
 ## What is PiBench Online?
 
 PiBench Online is an interactive system for benchmarking PM indexes in a fair and reproducible manner, it is based on PiBench, the first unified, highly customizable benchmarking framework for PM indexes.
 
 PiBench Online enables push-button evaluation of PM indexes: the user can upload a shared library that implements the index, set parameters to run customized benchmarks, and analyze results interactively, all through an easy-to-use web interface.
 
-We have made PiBench Online available at http://pibench.org and hope it can promote fair comparison and reproducibility in future PM index research.
+We have made PiBench Online available at http://pibench.org and hope it can promote fair comparison and reproducibility in future PM index research. Use the code in this repo to deploy your own.
+
+![](src/assets/readme-demo.gif)
 
 ## About Us
 
-PiBench Online is built by: [Xiangpeng Hao](https://haoxp.xyz), [Tianzheng Wang](https://www2.cs.sfu.ca/~tzwang/) ([Systems Group](http://systems.cs.sfu.ca/), Simon Fraser University), 
-Lucas Lersch (TU Dresden & SAP SE) and Ismail Oukid (Snowflake Computing)
+PiBench Online is built by: [Xiangpeng Hao](https://haoxp.xyz), [Tianzheng Wang](https://www2.cs.sfu.ca/~tzwang/) (Simon Fraser University), [Lucas Lersch](https://llersch.github.io/) (TU Dresden & SAP SE) and Ismail Oukid (Snowflake Computing).
 
-Read our paper: [Evaluating Persistent Memory Range Indexes](http://www.vldb.org/pvldb/vol13/p574-lersch.pdf)
+If you use PiBench Online in your work, please cite our VLDB 2020 demo paper:
+
+````
+Xiangpeng Hao, Lucas Lersch, Tianzheng Wang, Ismail Oukid:
+PiBench Online: Interactive Benchmarking of Persistent Memory Indexes. PVLDB 13 (2020)
+````
+
+Our own range index evaluation using PiBench is presented in the following [VLDB 2020 paper](http://www.vldb.org/pvldb/vol13/p574-lersch.pdf):
+````
+Lucas Lersch, Xiangpeng Hao, Ismail Oukid, Tianzheng Wang, Thomas Willhalm:
+Evaluating Persistent Memory Range Indexes. PVLDB 13(4): 574-587 (2019)
+````
 
 Request PiBench resources: support@pibench.org
 
