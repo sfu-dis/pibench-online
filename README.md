@@ -12,6 +12,27 @@ We have made PiBench Online available at http://pibench.org and hope it can prom
 
 ![](src/assets/readme-demo.gif)
 
+
+## Deploy your own instance
+
+Pibench Online allows you to deploy a server instance on your own machine and connect it with the pibench online web interface (http://pibench.org).
+
+You can either clone the code and build from source (see below), or simply use our official [docker image]().
+
+### Docker
+```bash
+# 1. Pull the pibench-online-backend image from docker hub
+# 2. connect the host's port 8000 with container's port 8000
+#    so users can access the web api from host's 8000 port
+docker run -p 127.0.0.1:8000:8000 pibench-online-backend:latest
+```
+
+### Bare metal 
+```bash
+cargo run --release
+```
+
+
 ## About Us
 
 PiBench Online is built by: [Xiangpeng Hao](https://haoxp.xyz), [Tianzheng Wang](https://www2.cs.sfu.ca/~tzwang/) (Simon Fraser University), [Lucas Lersch](https://llersch.github.io/) (TU Dresden & SAP SE) and Ismail Oukid (Snowflake Computing).
@@ -33,9 +54,21 @@ Request PiBench resources: support@pibench.org
 
 ## Contribution
 
+### Backend 
+The backend server requires rust nightly, which you can install from [rustup](https://rustup.rs/) 
+
+When rust toolchain is properly setup, building pibench online is as simple as:
+
+```bash
+cargo build [--release]
+```
+
+### Frontend
+
 The PiBench Online frontend requires nodejs and the yarn package manager.
 
 You also need to be familiar with [Vue.js](https://vuejs.org/) and [ElementUI](https://element.eleme.io/#/en-US) as well as [Echarts.js](echartsjs.com/).
+
 
 #### Project setup
 ```

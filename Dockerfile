@@ -2,8 +2,8 @@ FROM ubuntu:20.04
 
 LABEL maintainer="Xiangpeng Hao <haoxiangpeng@hotmail.com>"
 
-COPY . /usr/src/pibench-backend
-WORKDIR /usr/src/pibench-backend
+COPY . /usr/src/pibench-online
+WORKDIR /usr/src/pibench-online/backend
 
 ENV TZ="America/Vancouver"
 
