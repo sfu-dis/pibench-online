@@ -1,6 +1,6 @@
 # PiBench Online 
 
-[![Build Status](https://travis-ci.org/XiangpengHao/pibench-online.svg?branch=master)](https://travis-ci.org/XiangpengHao/pibench-online)
+[![Build Status](https://travis-ci.org/sfu-dis/pibench-online.svg?branch=master)](https://travis-ci.org/sfu-dis/pibench-online)
 
 ## What is PiBench Online?
 
@@ -21,10 +21,10 @@ You can either clone the code and build from source (see below), or simply use o
 
 ### Docker
 ```bash
-# 1. Pull the pibench-online-backend image from docker hub
+# 1. Pull the pibench-online image from docker hub
 # 2. connect the host's port 8000 with container's port 8000
 #    so users can access the web api from host's 8000 port
-docker run -p 127.0.0.1:8000:8000 pibench-online-backend:latest
+docker run -p 127.0.0.1:8000:8000 pibench-online:latest
 ```
 
 ### Bare metal 
