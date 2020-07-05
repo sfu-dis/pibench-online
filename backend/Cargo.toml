@@ -1,0 +1,30 @@
+[package]
+name = "pibench-backend"
+version = "0.1.0"
+authors = ["Xiangpeng Hao <xha62@sfu.ca>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4"
+serde_derive = "1.0"
+serde = "1.0"
+serde_json = "1.0"
+rocket_cors = "0.5"
+num_cpus = "1.11"
+rand = "0.7"
+chrono = "0.4"
+subprocess = "0.1"
+lazy_static = "1.4"
+spin = "0.5"
+rocket-multipart-form-data = "0.7"
+pibench-parser = "0.1"
+
+[dependencies.rocket_contrib]
+version = "0.4"
+default-features = false
+features = ["json"]
+
+[build-dependencies]
+cmake = "0.1"
