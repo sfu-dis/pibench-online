@@ -4,6 +4,7 @@ node_js:
 - lts/*
 
 before_install:
+  - cd frontend
   - npm install -g yarn --cache-min 999999999
 
 install:
