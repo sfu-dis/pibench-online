@@ -6,9 +6,9 @@
 
 PiBench Online is an interactive system for benchmarking PM indexes in a fair and reproducible manner, it is based on PiBench, the first unified, highly customizable benchmarking framework for PM indexes.
 
-PiBench Online enables push-button evaluation of PM indexes: the user can upload a shared library that implements the index, set parameters to run customized benchmarks, and analyze results interactively, all through an easy-to-use web interface.
+PiBench Online enables push-button evaluation of PM indexes: the user can upload a shared library that implements the index, set parameters to run customized benchmarks, and analyze results interactively, all through an easy-to-use web interface. We hope it can promote fair comparison and reproducibility in future PM index research
 
-We have made PiBench Online available at http://pibench.org and hope it can promote fair comparison and reproducibility in future PM index research. Use the code in this repo to deploy your own.
+Check out a demo video [here](https://www.cs.sfu.ca/~tzwang/pibench-demo-video.webm) and try it out at http://pibench.org. Use the code in this repo to deploy your own.
 
 ![](src/assets/readme-demo.gif)
 
