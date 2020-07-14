@@ -10,7 +10,7 @@ PiBench Online enables push-button evaluation of PM indexes: the user can upload
 
 Check out a demo video [here](https://www.cs.sfu.ca/~tzwang/pibench-demo-video.webm) and try it out at http://pibench.org. Use the code in this repo to deploy your own.
 
-![](src/assets/readme-demo.gif)
+![](frontend/src/assets/readme-demo.gif)
 
 
 ## Deploy your own instance
