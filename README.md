@@ -4,7 +4,7 @@
 
 ## What is PiBench Online?
 
-PiBench Online is an interactive system for benchmarking PM indexes in a fair and reproducible manner, it is based on PiBench, the first unified, highly customizable benchmarking framework for PM indexes.
+PiBench Online is an interactive system for benchmarking PM indexes in a fair and reproducible manner, it is based on [PiBench](https://github.com/sfu-dis/pibench), the first unified, highly customizable benchmarking framework for PM indexes.
 
 PiBench Online enables push-button evaluation of PM indexes: the user can upload a shared library that implements the index, set parameters to run customized benchmarks, and analyze results interactively, all through an easy-to-use web interface. We hope it can promote fair comparison and reproducibility in future PM index research
 
