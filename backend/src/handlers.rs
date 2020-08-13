@@ -23,7 +23,7 @@ lazy_static! {
     };
     pub static ref BACKEND_URL: String = match env::var("PIBENCH_URL") {
         Ok(val) => val,
-        Err(_e) => "http://home.haoxp.xyz:7000".to_string(),
+        Err(_e) => "http://localhost:8000".to_string(),
     };
     pub static ref PIBENCH_BIN: String = match env::var("PIBENCH_BIN") {
         Ok(val) => val,
