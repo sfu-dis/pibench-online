@@ -40,6 +40,7 @@ pub fn get_info() -> Json<InstanceInfo> {
     let mut entries = fs::read_dir(WRAPPER_DIR.to_string())
         .unwrap()
         .map(|res| res.map(|e| e.path().file_name().unwrap().to_str().unwrap().to_string()))
+        .filter(|v| v.is_ok() && v.as_ref().unwrap().as_bytes()[0] != '.' as u8)
         .collect::<Result<Vec<_>, io::Error>>()
         .unwrap();
     entries.sort();
