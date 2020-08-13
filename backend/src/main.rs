@@ -22,6 +22,7 @@ fn main() {
         "http://pibench.haoxp.xyz",
         "http://pibench.org",
         "http://home.haoxp.xyz:7001",
+        "http://localhost:8000",
     ]);
     let cors = rocket_cors::CorsOptions {
         allowed_origins,
